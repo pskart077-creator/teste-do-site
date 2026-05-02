@@ -5,7 +5,7 @@ import { buildSegmentServiceMetadata } from "@/lib/seo";
 import { getServiceBySlug, SERVICES } from "@/lib/services";
 
 export async function generateMetadata(
-  props: PageProps<"/solucoes/para-e-commerce/[slug]">,
+  props: PageProps<"/solucoes/mei/[slug]">,
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const service = getServiceBySlug(slug);
@@ -34,7 +34,7 @@ export function generateStaticParams() {
 }
 
 export default async function EcommerceDetailsPage(
-  props: PageProps<"/solucoes/para-e-commerce/[slug]">,
+  props: PageProps<"/solucoes/mei/[slug]">,
 ) {
   const { slug } = await props.params;
   const service = getServiceBySlug(slug);
