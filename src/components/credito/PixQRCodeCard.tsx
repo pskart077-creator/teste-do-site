@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import type { PixCharge } from "@prisma/client";
 import { formatCurrencyBrl } from "@/lib/credit/helpers";
 
@@ -7,6 +10,25 @@ type PixQRCodeCardProps = {
 };
 
 export function PixQRCodeCard({ charge }: PixQRCodeCardProps) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopyPixCode() {
+    if (!charge.copyPaste) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(charge.copyPaste);
+      setCopied(true);
+
+      window.setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch {
+      setCopied(false);
+    }
+  }
+
   return (
     <article className="credpagos-pix-card">
       <h3 className="credpagos-credito-card-title">
@@ -41,11 +63,20 @@ export function PixQRCodeCard({ charge }: PixQRCodeCardProps) {
       {charge.copyPaste ? (
         <label className="credpagos-form-group">
           <span className="credpagos-form-label">Pix copia e cola</span>
+
           <textarea
             className="credpagos-form-textarea"
             value={charge.copyPaste}
             readOnly
           />
+
+          <button
+            type="button"
+            className="credpagos-credito-button credpagos-credito-button--primary"
+            onClick={handleCopyPixCode}
+          >
+            {copied ? "Código copiado" : "Copiar código Pix"}
+          </button>
         </label>
       ) : null}
 

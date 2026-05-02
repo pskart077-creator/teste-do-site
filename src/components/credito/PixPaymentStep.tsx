@@ -146,6 +146,7 @@ export function PixPaymentStep({
   const [charge, setCharge] = useState<VexusCashInChargeView | null>(null);
   const [isLoadingCharge, setIsLoadingCharge] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
 
   const transactionId = `${result.protocol}-PIX-5990-${retryCount}`;
@@ -163,6 +164,7 @@ export function PixPaymentStep({
     async function createCashInCharge() {
       setIsLoadingCharge(true);
       setErrorMessage(null);
+      setCopyMessage(null);
       setCharge(null);
 
       try {
@@ -206,7 +208,26 @@ export function PixPaymentStep({
   function retryCreateCharge() {
     cashInChargeCache.delete(transactionId);
     cashInChargeRequests.delete(transactionId);
+    setCopyMessage(null);
     setRetryCount((current) => current + 1);
+  }
+
+  async function handleCopyPixCode() {
+    if (!charge?.copyPaste) {
+      setCopyMessage("Código Pix indisponível.");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(charge.copyPaste);
+      setCopyMessage("Código Pix copiado.");
+
+      window.setTimeout(() => {
+        setCopyMessage(null);
+      }, 2500);
+    } catch {
+      setCopyMessage("Não foi possível copiar o código Pix.");
+    }
   }
 
   useEffect(() => {
@@ -344,7 +365,7 @@ export function PixPaymentStep({
               </div>
             </div>
 
-            <label className="credpagos-form-group">
+            <div className="credpagos-form-group">
               <span className="credpagos-form-label">
                 Pix copia e cola para o cliente pagar
               </span>
@@ -359,7 +380,20 @@ export function PixPaymentStep({
                 }
                 readOnly
               />
-            </label>
+
+              <button
+                type="button"
+                className="credpagos-credito-button credpagos-credito-button--primary"
+                onClick={handleCopyPixCode}
+                disabled={isLoadingCharge || !charge?.copyPaste}
+              >
+                Copiar Pix copia e cola
+              </button>
+
+              {copyMessage ? (
+                <span className="credpagos-form-helper">{copyMessage}</span>
+              ) : null}
+            </div>
 
             {errorMessage ? (
               <div className="credpagos-pix-error-box">
