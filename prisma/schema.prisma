@@ -1,0 +1,1377 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  EDITOR
+  AUTHOR
+}
+
+enum NewsStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum NewsAuditAction {
+  LOGIN
+  LOGOUT
+  LOGIN_FAILED
+  CREATE
+  UPDATE
+  DELETE
+  PUBLISH
+  STATUS_CHANGE
+  UPLOAD
+  DUPLICATE
+  CATEGORY_CREATE
+  CATEGORY_UPDATE
+  CATEGORY_DELETE
+  TAG_CREATE
+  TAG_UPDATE
+  TAG_DELETE
+}
+
+enum InternalAdminRoleKey {
+  SUPERADMIN
+  ADMIN
+  VISUALIZADOR
+}
+
+enum InternalLeadStatus {
+  NOVO
+  EM_ANALISE
+  CONTATADO
+  QUALIFICADO
+  CONVERTIDO
+  PERDIDO
+  SPAM
+}
+
+enum InternalLeadPriority {
+  BAIXA
+  MEDIA
+  ALTA
+  URGENTE
+}
+
+enum InternalLeadHistoryAction {
+  CREATED
+  STATUS_CHANGED
+  PRIORITY_CHANGED
+  ASSIGNEE_CHANGED
+  NOTE_ADDED
+  TAGS_UPDATED
+  UPDATED
+}
+
+enum InternalAuditAction {
+  LOGIN_SUCCESS
+  LOGIN_FAILED
+  LOGOUT
+  SESSION_REVOKED
+  USER_CREATED
+  USER_UPDATED
+  USER_DEACTIVATED
+  USER_REACTIVATED
+  USER_ROLE_CHANGED
+  USER_PASSWORD_RESET
+  LEAD_RECEIVED
+  LEAD_VIEWED
+  LEAD_STATUS_CHANGED
+  LEAD_PRIORITY_CHANGED
+  LEAD_ASSIGNED
+  LEAD_NOTE_ADDED
+  LEAD_TAGS_UPDATED
+  LEAD_EXPORTED
+  RECIPIENT_CREATED
+  RECIPIENT_UPDATED
+  RECIPIENT_DELETED
+  SETTINGS_UPDATED
+  NOTIFICATION_SENT
+  NOTIFICATION_FAILED
+  SECURITY_LOCKOUT
+  SECURITY_EVENT
+  ANALYTICS_INGESTED
+  CRM_DEAL_CREATED
+  CRM_DEAL_UPDATED
+  CRM_DEAL_STAGE_CHANGED
+  CRM_ACTIVITY_ADDED
+  CRM_TASK_CREATED
+  CRM_TASK_UPDATED
+  CHAT_CONVERSATION_STARTED
+  CHAT_CONVERSATION_VIEWED
+  CHAT_CONVERSATION_UPDATED
+  CHAT_MESSAGE_RECEIVED
+  CHAT_MESSAGE_SENT
+}
+
+enum InternalNotificationChannel {
+  EMAIL
+}
+
+enum InternalNotificationDeliveryStatus {
+  QUEUED
+  SENT
+  FAILED
+}
+
+enum InternalNotificationJobStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+  DEAD
+}
+
+enum AnalyticsEventType {
+  PAGE_VIEW
+  LEAD_SUBMITTED
+  CUSTOM
+}
+
+enum CrmDealStage {
+  NOVO_CONTATO
+  DIAGNOSTICO
+  PROPOSTA
+  NEGOCIACAO
+  GANHO
+  PERDIDO
+}
+
+enum CrmActivityType {
+  NOTE
+  CALL
+  EMAIL
+  MEETING
+  STATUS_CHANGE
+  SYSTEM
+}
+
+enum CrmTaskStatus {
+  OPEN
+  IN_PROGRESS
+  DONE
+  CANCELED
+}
+
+enum ChatConversationStatus {
+  OPEN
+  WAITING_ATTENDANT
+  WAITING_VISITOR
+  RESOLVED
+  ARCHIVED
+}
+
+enum ChatConversationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum ChatMessageSenderType {
+  VISITOR
+  ATTENDANT
+  SYSTEM
+}
+
+model Role {
+  id        String   @id @default(cuid()) @map("id")
+  key       UserRole @unique @map("key")
+  name      String   @map("name")
+  users     User[]
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("roles")
+}
+
+model User {
+  id             String         @id @default(cuid()) @map("id")
+  email          String         @unique @map("email")
+  displayName    String         @map("display_name")
+  passwordHash   String         @map("password_hash")
+  roleId         String         @map("role_id")
+  role           Role           @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  isActive       Boolean        @default(true) @map("is_active")
+  posts          NewsPost[]     @relation("NewsAuthor")
+  sessions       AdminSession[]
+  uploadedAssets NewsAsset[]    @relation("AssetUploader")
+  auditLogs      NewsAuditLog[] @relation("AuditActor")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  @@index([roleId])
+  @@map("users")
+}
+
+model AdminSession {
+  id         String    @id @default(cuid()) @map("id")
+  tokenHash  String    @unique @map("token_hash")
+  csrfToken  String    @map("csrf_token")
+  userId     String    @map("user_id")
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipAddress  String?   @map("ip_address")
+  userAgent  String?   @map("user_agent")
+  expiresAt  DateTime  @map("expires_at")
+  lastSeenAt DateTime  @default(now()) @map("last_seen_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  revokedAt  DateTime? @map("revoked_at")
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("admin_sessions")
+}
+
+model NewsCategory {
+  id            String     @id @default(cuid()) @map("id")
+  name          String     @unique @map("name")
+  slug          String     @unique @map("slug")
+  description   String?    @map("description")
+  color         String?    @map("color")
+  allowIndexing Boolean    @default(true) @map("allow_indexing")
+  posts         NewsPost[]
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+  deletedAt     DateTime?  @map("deleted_at")
+
+  @@index([deletedAt])
+  @@map("news_categories")
+}
+
+model NewsTag {
+  id        String        @id @default(cuid()) @map("id")
+  name      String        @unique @map("name")
+  slug      String        @unique @map("slug")
+  posts     NewsPostTag[]
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  deletedAt DateTime?     @map("deleted_at")
+
+  @@index([deletedAt])
+  @@map("news_tags")
+}
+
+model NewsPost {
+  id                 String        @id @default(cuid()) @map("id")
+  title              String        @map("title")
+  slug               String        @unique @map("slug")
+  excerpt            String        @map("excerpt")
+  content            Json          @map("content")
+  coverImageUrl      String?       @map("cover_image_url")
+  coverImageAlt      String?       @map("cover_image_alt")
+  categoryId         String        @map("category_id")
+  category           NewsCategory  @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  authorId           String        @map("author_id")
+  author             User          @relation("NewsAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  status             NewsStatus    @default(DRAFT) @map("status")
+  publishedAt        DateTime?     @map("published_at")
+  scheduledAt        DateTime?     @map("scheduled_at")
+  readingTime        Int           @default(1) @map("reading_time")
+  featured           Boolean       @default(false) @map("featured")
+  highlightOnHome    Boolean       @default(false) @map("highlight_on_home")
+  canonicalUrl       String?       @map("canonical_url")
+  allowIndexing      Boolean       @default(true) @map("allow_indexing")
+  seoTitle           String?       @map("seo_title")
+  seoDescription     String?       @map("seo_description")
+  seoKeywords        String?       @map("seo_keywords")
+  ogTitle            String?       @map("og_title")
+  ogDescription      String?       @map("og_description")
+  ogImage            String?       @map("og_image")
+  twitterTitle       String?       @map("twitter_title")
+  twitterDescription String?       @map("twitter_description")
+  ctaTitle           String?       @map("cta_title")
+  ctaDescription     String?       @map("cta_description")
+  ctaButtonLabel     String?       @map("cta_button_label")
+  ctaButtonUrl       String?       @map("cta_button_url")
+  tags               NewsPostTag[]
+  assets             NewsAsset[]
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  deletedAt          DateTime?     @map("deleted_at")
+
+  @@index([status, publishedAt])
+  @@index([featured])
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([deletedAt])
+  @@index([scheduledAt])
+  @@map("news_posts")
+}
+
+model NewsPostTag {
+  id        String   @id @default(cuid()) @map("id")
+  postId    String   @map("post_id")
+  post      NewsPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tagId     String   @map("tag_id")
+  tag       NewsTag  @relation(fields: [tagId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([postId, tagId])
+  @@index([tagId])
+  @@map("news_post_tags")
+}
+
+model NewsAsset {
+  id           String    @id @default(cuid()) @map("id")
+  postId       String?   @map("post_id")
+  post         NewsPost? @relation(fields: [postId], references: [id], onDelete: SetNull)
+  uploadedById String    @map("uploaded_by_id")
+  uploadedBy   User      @relation("AssetUploader", fields: [uploadedById], references: [id], onDelete: Restrict)
+  kind         String    @default("image") @map("kind")
+  fileName     String    @map("file_name")
+  extension    String    @map("extension")
+  mimeType     String    @map("mime_type")
+  sizeBytes    Int       @map("size_bytes")
+  width        Int?      @map("width")
+  height       Int?      @map("height")
+  checksum     String    @map("checksum")
+  storagePath  String    @map("storage_path")
+  publicUrl    String    @map("public_url")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  @@index([postId])
+  @@index([uploadedById])
+  @@map("news_assets")
+}
+
+model NewsAuditLog {
+  id          String          @id @default(cuid()) @map("id")
+  action      NewsAuditAction @map("action")
+  actorId     String?         @map("actor_id")
+  actor       User?           @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  entityType  String          @map("entity_type")
+  entityId    String?         @map("entity_id")
+  description String?         @map("description")
+  metadata    Json?           @map("metadata")
+  ipAddress   String?         @map("ip_address")
+  userAgent   String?         @map("user_agent")
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  @@index([action])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("news_audit_logs")
+}
+
+model InternalAdminRole {
+  id        String               @id @default(cuid()) @map("id")
+  key       InternalAdminRoleKey @unique @map("key")
+  name      String               @map("name")
+  users     InternalAdminUser[]
+  createdAt DateTime             @default(now()) @map("created_at")
+  updatedAt DateTime             @updatedAt @map("updated_at")
+
+  @@map("admin_roles")
+}
+
+model InternalAdminUser {
+  id                   String                 @id @default(cuid()) @map("id")
+  email                String                 @unique @map("email")
+  fullName             String                 @map("full_name")
+  passwordHash         String                 @map("password_hash")
+  roleId               String                 @map("role_id")
+  role                 InternalAdminRole      @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  isActive             Boolean                @default(true) @map("is_active")
+  failedLoginCount     Int                    @default(0) @map("failed_login_count")
+  lockedUntil          DateTime?              @map("locked_until")
+  lastLoginAt          DateTime?              @map("last_login_at")
+  lastPasswordChangeAt DateTime?              @map("last_password_change_at")
+  createdById          String?                @map("created_by_id")
+  createdBy            InternalAdminUser?     @relation("InternalAdminUserCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdUsers         InternalAdminUser[]    @relation("InternalAdminUserCreator")
+  sessions             InternalAdminSession[]
+  assignedLeads        Lead[]                 @relation("LeadAssignee")
+  notes                LeadNote[]             @relation("LeadNoteAuthor")
+  statusChanges        LeadStatusHistory[]    @relation("LeadStatusChangedBy")
+  auditLogs            AuditLog[]             @relation("InternalAuditActor")
+  crmOwnedAccounts     CrmAccount[]           @relation("CrmAccountOwner")
+  crmOwnedDeals        CrmDeal[]              @relation("CrmDealOwner")
+  crmActivities        CrmActivity[]          @relation("CrmActivityActor")
+  crmAssignedTasks     CrmTask[]              @relation("CrmTaskAssignee")
+  assignedChats        ChatConversation[]     @relation("ChatConversationAssignee")
+  chatMessages         ChatMessage[]          @relation("ChatMessageSenderAdmin")
+  createdAt            DateTime               @default(now()) @map("created_at")
+  updatedAt            DateTime               @updatedAt @map("updated_at")
+  deletedAt            DateTime?              @map("deleted_at")
+
+  @@index([roleId])
+  @@index([isActive, deletedAt])
+  @@map("admin_users")
+}
+
+model InternalAdminSession {
+  id                   String            @id @default(cuid()) @map("id")
+  sessionTokenHash     String            @unique @map("session_token_hash")
+  csrfTokenHash        String            @map("csrf_token_hash")
+  userId               String            @map("user_id")
+  user                 InternalAdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipMasked             String?           @map("ip_masked")
+  userAgentHash        String?           @map("user_agent_hash")
+  expiresAt            DateTime          @map("expires_at")
+  lastSeenAt           DateTime          @default(now()) @map("last_seen_at")
+  createdAt            DateTime          @default(now()) @map("created_at")
+  revokedAt            DateTime?         @map("revoked_at")
+  revokedReason        String?           @map("revoked_reason")
+  rotatedFromSessionId String?           @map("rotated_from_session_id")
+
+  @@index([userId, revokedAt, expiresAt])
+  @@index([expiresAt])
+  @@map("internal_admin_sessions")
+}
+
+model InternalIpLock {
+  id            String    @id @default(cuid()) @map("id")
+  ipMasked      String    @unique @map("ip_masked")
+  failedCount   Int       @default(0) @map("failed_count")
+  lockedUntil   DateTime? @map("locked_until")
+  lastAttemptAt DateTime? @map("last_attempt_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("internal_ip_locks")
+}
+
+model InternalLoginAttempt {
+  id        String   @id @default(cuid()) @map("id")
+  email     String?  @map("email")
+  userId    String?  @map("user_id")
+  ipMasked  String   @map("ip_masked")
+  success   Boolean  @default(false) @map("success")
+  reason    String?  @map("reason")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([email, createdAt])
+  @@index([ipMasked, createdAt])
+  @@index([userId, createdAt])
+  @@map("internal_login_attempts")
+}
+
+model AnalyticsVisitor {
+  id                String             @id @default(cuid()) @map("id")
+  externalVisitorId String             @unique @map("external_visitor_id")
+  firstSeenAt       DateTime           @default(now()) @map("first_seen_at")
+  lastSeenAt        DateTime           @default(now()) @map("last_seen_at")
+  firstReferrer     String?            @map("first_referrer")
+  firstLandingPath  String?            @map("first_landing_path")
+  country           String?            @map("country")
+  region            String?            @map("region")
+  city              String?            @map("city")
+  deviceType        String?            @map("device_type")
+  browser           String?            @map("browser")
+  os                String?            @map("os")
+  leadConversions   Int                @default(0) @map("lead_conversions")
+  events            AnalyticsEvent[]
+  sessions          AnalyticsSession[]
+  leads             Lead[]
+  chatConversations ChatConversation[]
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+
+  @@index([lastSeenAt(sort: Desc)])
+  @@index([leadConversions])
+  @@map("analytics_visitors")
+}
+
+model AnalyticsSession {
+  id                String             @id @default(cuid()) @map("id")
+  externalSessionId String             @unique @map("external_session_id")
+  visitorId         String             @map("visitor_id")
+  visitor           AnalyticsVisitor   @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  startedAt         DateTime           @default(now()) @map("started_at")
+  lastSeenAt        DateTime           @default(now()) @map("last_seen_at")
+  endedAt           DateTime?          @map("ended_at")
+  landingPath       String?            @map("landing_path")
+  exitPath          String?            @map("exit_path")
+  referrer          String?            @map("referrer")
+  utmSource         String?            @map("utm_source")
+  utmMedium         String?            @map("utm_medium")
+  utmCampaign       String?            @map("utm_campaign")
+  utmContent        String?            @map("utm_content")
+  utmTerm           String?            @map("utm_term")
+  source            String?            @map("source")
+  medium            String?            @map("medium")
+  campaign          String?            @map("campaign")
+  deviceType        String?            @map("device_type")
+  browser           String?            @map("browser")
+  os                String?            @map("os")
+  country           String?            @map("country")
+  region            String?            @map("region")
+  city              String?            @map("city")
+  ipMasked          String?            @map("ip_masked")
+  isBot             Boolean            @default(false) @map("is_bot")
+  leadConversions   Int                @default(0) @map("lead_conversions")
+  events            AnalyticsEvent[]
+  leads             Lead[]
+  chatConversations ChatConversation[]
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+
+  @@index([visitorId, startedAt(sort: Desc)])
+  @@index([startedAt(sort: Desc)])
+  @@index([utmSource, utmCampaign])
+  @@index([leadConversions])
+  @@map("analytics_sessions")
+}
+
+model AnalyticsEvent {
+  id                 String             @id @default(cuid()) @map("id")
+  visitorId          String             @map("visitor_id")
+  visitor            AnalyticsVisitor   @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  analyticsSessionId String?            @map("analytics_session_id")
+  session            AnalyticsSession?  @relation(fields: [analyticsSessionId], references: [id], onDelete: SetNull)
+  eventType          AnalyticsEventType @map("event_type")
+  path               String             @map("path")
+  referrer           String?            @map("referrer")
+  title              String?            @map("title")
+  source             String?            @map("source")
+  queryString        String?            @map("query_string")
+  context            Json?              @map("context")
+  ipMasked           String?            @map("ip_masked")
+  country            String?            @map("country")
+  region             String?            @map("region")
+  city               String?            @map("city")
+  deviceType         String?            @map("device_type")
+  browser            String?            @map("browser")
+  os                 String?            @map("os")
+  isBot              Boolean            @default(false) @map("is_bot")
+  occurredAt         DateTime           @default(now()) @map("occurred_at")
+  createdAt          DateTime           @default(now()) @map("created_at")
+
+  @@index([eventType, occurredAt(sort: Desc)])
+  @@index([path, occurredAt(sort: Desc)])
+  @@index([analyticsSessionId, occurredAt(sort: Desc)])
+  @@index([visitorId, occurredAt(sort: Desc)])
+  @@map("analytics_events")
+}
+
+model Lead {
+  id                 String               @id @default(cuid()) @map("id")
+  name               String               @map("name")
+  email              String               @map("email")
+  phone              String?              @map("phone")
+  company            String?              @map("company")
+  source             String?              @map("source")
+  sourcePage         String?              @map("source_page")
+  campaign           String?              @map("campaign")
+  utmSource          String?              @map("utm_source")
+  utmMedium          String?              @map("utm_medium")
+  utmCampaign        String?              @map("utm_campaign")
+  utmContent         String?              @map("utm_content")
+  utmTerm            String?              @map("utm_term")
+  message            String?              @map("message")
+  status             InternalLeadStatus   @default(NOVO) @map("status")
+  priority           InternalLeadPriority @default(MEDIA) @map("priority")
+  assigneeId         String?              @map("assignee_id")
+  assignee           InternalAdminUser?   @relation("LeadAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  analyticsVisitorId String?              @map("analytics_visitor_id")
+  analyticsVisitor   AnalyticsVisitor?    @relation(fields: [analyticsVisitorId], references: [id], onDelete: SetNull)
+  analyticsSessionId String?              @map("analytics_session_id")
+  analyticsSession   AnalyticsSession?    @relation(fields: [analyticsSessionId], references: [id], onDelete: SetNull)
+  ipMasked           String?              @map("ip_masked")
+  userAgent          String?              @map("user_agent")
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  deletedAt          DateTime?            @map("deleted_at")
+  notes              LeadNote[]
+  tags               LeadTagRelation[]
+  history            LeadStatusHistory[]
+  notifications      NotificationLog[]
+  jobs               NotificationJob[]
+  crmContact         CrmContact?
+  crmDeals           CrmDeal[]
+  chatConversations  ChatConversation[]
+
+  @@index([status, createdAt(sort: Desc)])
+  @@index([assigneeId, status])
+  @@index([source, createdAt(sort: Desc)])
+  @@index([email])
+  @@index([phone])
+  @@index([company])
+  @@index([analyticsVisitorId, createdAt(sort: Desc)])
+  @@index([analyticsSessionId, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@map("leads")
+}
+
+model ChatConversation {
+  id                     String                   @id @default(cuid()) @map("id")
+  visitorTokenHash       String                   @unique @map("visitor_token_hash")
+  visitorName            String?                  @map("visitor_name")
+  visitorEmail           String?                  @map("visitor_email")
+  visitorPhone           String?                  @map("visitor_phone")
+  source                 String?                  @map("source")
+  sourcePage             String?                  @map("source_page")
+  campaign               String?                  @map("campaign")
+  utmSource              String?                  @map("utm_source")
+  utmMedium              String?                  @map("utm_medium")
+  utmCampaign            String?                  @map("utm_campaign")
+  utmContent             String?                  @map("utm_content")
+  utmTerm                String?                  @map("utm_term")
+  status                 ChatConversationStatus   @default(OPEN) @map("status")
+  priority               ChatConversationPriority @default(NORMAL) @map("priority")
+  assignedToId           String?                  @map("assigned_to_id")
+  assignedTo             InternalAdminUser?       @relation("ChatConversationAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  leadId                 String?                  @map("lead_id")
+  lead                   Lead?                    @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  analyticsVisitorId     String?                  @map("analytics_visitor_id")
+  analyticsVisitor       AnalyticsVisitor?        @relation(fields: [analyticsVisitorId], references: [id], onDelete: SetNull)
+  analyticsSessionId     String?                  @map("analytics_session_id")
+  analyticsSession       AnalyticsSession?        @relation(fields: [analyticsSessionId], references: [id], onDelete: SetNull)
+  ipMasked               String?                  @map("ip_masked")
+  userAgent              String?                  @map("user_agent")
+  unreadForAdmin         Int                      @default(0) @map("unread_for_admin")
+  unreadForVisitor       Int                      @default(0) @map("unread_for_visitor")
+  lastMessageAt          DateTime?                @map("last_message_at")
+  lastVisitorMessageAt   DateTime?                @map("last_visitor_message_at")
+  lastAttendantMessageAt DateTime?                @map("last_attendant_message_at")
+  closedAt               DateTime?                @map("closed_at")
+  createdAt              DateTime                 @default(now()) @map("created_at")
+  updatedAt              DateTime                 @updatedAt @map("updated_at")
+  deletedAt              DateTime?                @map("deleted_at")
+  messages               ChatMessage[]
+
+  @@index([status, updatedAt(sort: Desc)])
+  @@index([assignedToId, status, updatedAt(sort: Desc)])
+  @@index([visitorEmail])
+  @@index([visitorName])
+  @@index([lastMessageAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@index([leadId])
+  @@index([analyticsVisitorId, createdAt(sort: Desc)])
+  @@index([analyticsSessionId, createdAt(sort: Desc)])
+  @@index([deletedAt])
+  @@map("chat_conversations")
+}
+
+model ChatMessage {
+  id              String                @id @default(cuid()) @map("id")
+  conversationId  String                @map("conversation_id")
+  conversation    ChatConversation      @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderType      ChatMessageSenderType @map("sender_type")
+  senderAdminId   String?               @map("sender_admin_id")
+  senderAdmin     InternalAdminUser?    @relation("ChatMessageSenderAdmin", fields: [senderAdminId], references: [id], onDelete: SetNull)
+  body            String                @map("body")
+  ipMasked        String?               @map("ip_masked")
+  userAgent       String?               @map("user_agent")
+  readByAdminAt   DateTime?             @map("read_by_admin_at")
+  readByVisitorAt DateTime?             @map("read_by_visitor_at")
+  createdAt       DateTime              @default(now()) @map("created_at")
+
+  @@index([conversationId, createdAt(sort: Desc)])
+  @@index([senderType, createdAt(sort: Desc)])
+  @@index([senderAdminId, createdAt(sort: Desc)])
+  @@map("chat_messages")
+}
+
+model LeadNote {
+  id        String            @id @default(cuid()) @map("id")
+  leadId    String            @map("lead_id")
+  lead      Lead              @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  authorId  String            @map("author_id")
+  author    InternalAdminUser @relation("LeadNoteAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  note      String            @map("note")
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+  deletedAt DateTime?         @map("deleted_at")
+
+  @@index([leadId, createdAt(sort: Desc)])
+  @@index([authorId])
+  @@map("lead_notes")
+}
+
+model LeadTag {
+  id        String            @id @default(cuid()) @map("id")
+  name      String            @unique @map("name")
+  slug      String            @unique @map("slug")
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+  deletedAt DateTime?         @map("deleted_at")
+  leads     LeadTagRelation[]
+
+  @@index([deletedAt])
+  @@map("lead_tags")
+}
+
+model LeadTagRelation {
+  id        String   @id @default(cuid()) @map("id")
+  leadId    String   @map("lead_id")
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  tagId     String   @map("tag_id")
+  tag       LeadTag  @relation(fields: [tagId], references: [id], onDelete: Restrict)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([leadId, tagId])
+  @@index([tagId])
+  @@map("lead_tag_relations")
+}
+
+model LeadStatusHistory {
+  id             String                    @id @default(cuid()) @map("id")
+  leadId         String                    @map("lead_id")
+  lead           Lead                      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  action         InternalLeadHistoryAction @map("action")
+  changedById    String?                   @map("changed_by_id")
+  changedBy      InternalAdminUser?        @relation("LeadStatusChangedBy", fields: [changedById], references: [id], onDelete: SetNull)
+  fromStatus     InternalLeadStatus?       @map("from_status")
+  toStatus       InternalLeadStatus?       @map("to_status")
+  fromPriority   InternalLeadPriority?     @map("from_priority")
+  toPriority     InternalLeadPriority?     @map("to_priority")
+  fromAssigneeId String?                   @map("from_assignee_id")
+  toAssigneeId   String?                   @map("to_assignee_id")
+  note           String?                   @map("note")
+  createdAt      DateTime                  @default(now()) @map("created_at")
+
+  @@index([leadId, createdAt(sort: Desc)])
+  @@index([action])
+  @@index([changedById])
+  @@map("lead_status_history")
+}
+
+model CrmAccount {
+  id        String             @id @default(cuid()) @map("id")
+  name      String             @map("name")
+  website   String?            @map("website")
+  segment   String?            @map("segment")
+  notes     String?            @map("notes")
+  ownerId   String?            @map("owner_id")
+  owner     InternalAdminUser? @relation("CrmAccountOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  contacts  CrmContact[]
+  deals     CrmDeal[]
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
+  deletedAt DateTime?          @map("deleted_at")
+
+  @@index([ownerId, createdAt(sort: Desc)])
+  @@index([name])
+  @@index([deletedAt])
+  @@map("crm_accounts")
+}
+
+model CrmContact {
+  id        String      @id @default(cuid()) @map("id")
+  accountId String?     @map("account_id")
+  account   CrmAccount? @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  leadId    String?     @unique @map("lead_id")
+  lead      Lead?       @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  fullName  String      @map("full_name")
+  email     String?     @map("email")
+  phone     String?     @map("phone")
+  position  String?     @map("position")
+  isPrimary Boolean     @default(false) @map("is_primary")
+  deals     CrmDeal[]
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  deletedAt DateTime?   @map("deleted_at")
+
+  @@index([accountId, createdAt(sort: Desc)])
+  @@index([email])
+  @@index([deletedAt])
+  @@map("crm_contacts")
+}
+
+model CrmDeal {
+  id              String             @id @default(cuid()) @map("id")
+  title           String             @map("title")
+  stage           CrmDealStage       @default(NOVO_CONTATO) @map("stage")
+  valueCents      Int?               @map("value_cents")
+  currency        String             @default("BRL") @map("currency")
+  probability     Int                @default(0) @map("probability")
+  expectedCloseAt DateTime?          @map("expected_close_at")
+  source          String?            @map("source")
+  notes           String?            @map("notes")
+  ownerId         String?            @map("owner_id")
+  owner           InternalAdminUser? @relation("CrmDealOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  leadId          String?            @map("lead_id")
+  lead            Lead?              @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  accountId       String?            @map("account_id")
+  account         CrmAccount?        @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  contactId       String?            @map("contact_id")
+  contact         CrmContact?        @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  activities      CrmActivity[]
+  tasks           CrmTask[]
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+  deletedAt       DateTime?          @map("deleted_at")
+
+  @@index([stage, createdAt(sort: Desc)])
+  @@index([ownerId, stage])
+  @@index([leadId])
+  @@index([accountId])
+  @@index([contactId])
+  @@index([deletedAt])
+  @@map("crm_deals")
+}
+
+model CrmActivity {
+  id          String             @id @default(cuid()) @map("id")
+  dealId      String             @map("deal_id")
+  deal        CrmDeal            @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  actorId     String?            @map("actor_id")
+  actor       InternalAdminUser? @relation("CrmActivityActor", fields: [actorId], references: [id], onDelete: SetNull)
+  type        CrmActivityType    @default(NOTE) @map("type")
+  description String             @map("description")
+  metadata    Json?              @map("metadata")
+  createdAt   DateTime           @default(now()) @map("created_at")
+
+  @@index([dealId, createdAt(sort: Desc)])
+  @@index([actorId, createdAt(sort: Desc)])
+  @@index([type, createdAt(sort: Desc)])
+  @@map("crm_activities")
+}
+
+model CrmTask {
+  id          String             @id @default(cuid()) @map("id")
+  dealId      String             @map("deal_id")
+  deal        CrmDeal            @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  assigneeId  String?            @map("assignee_id")
+  assignee    InternalAdminUser? @relation("CrmTaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  title       String             @map("title")
+  description String?            @map("description")
+  dueAt       DateTime?          @map("due_at")
+  status      CrmTaskStatus      @default(OPEN) @map("status")
+  completedAt DateTime?          @map("completed_at")
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+
+  @@index([dealId, status])
+  @@index([assigneeId, status])
+  @@index([dueAt, status])
+  @@map("crm_tasks")
+}
+
+model NotificationRecipient {
+  id        String            @id @default(cuid()) @map("id")
+  email     String            @unique @map("email")
+  fullName  String?           @map("full_name")
+  isActive  Boolean           @default(true) @map("is_active")
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+  deletedAt DateTime?         @map("deleted_at")
+  logs      NotificationLog[]
+  jobs      NotificationJob[]
+
+  @@index([isActive, deletedAt])
+  @@map("notification_recipients")
+}
+
+model NotificationLog {
+  id           String                             @id @default(cuid()) @map("id")
+  leadId       String                             @map("lead_id")
+  lead         Lead                               @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  recipientId  String                             @map("recipient_id")
+  recipient    NotificationRecipient              @relation(fields: [recipientId], references: [id], onDelete: Restrict)
+  channel      InternalNotificationChannel        @default(EMAIL) @map("channel")
+  status       InternalNotificationDeliveryStatus @default(QUEUED) @map("status")
+  attempt      Int                                @default(0) @map("attempt")
+  provider     String?                            @map("provider")
+  errorMessage String?                            @map("error_message")
+  sentAt       DateTime?                          @map("sent_at")
+  createdAt    DateTime                           @default(now()) @map("created_at")
+  updatedAt    DateTime                           @updatedAt @map("updated_at")
+
+  @@index([leadId, createdAt(sort: Desc)])
+  @@index([recipientId, createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("notification_logs")
+}
+
+model NotificationJob {
+  id            String                        @id @default(cuid()) @map("id")
+  leadId        String                        @map("lead_id")
+  lead          Lead                          @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  recipientId   String                        @map("recipient_id")
+  recipient     NotificationRecipient         @relation(fields: [recipientId], references: [id], onDelete: Restrict)
+  status        InternalNotificationJobStatus @default(PENDING) @map("status")
+  attempts      Int                           @default(0) @map("attempts")
+  maxAttempts   Int                           @default(5) @map("max_attempts")
+  nextAttemptAt DateTime                      @default(now()) @map("next_attempt_at")
+  lockedAt      DateTime?                     @map("locked_at")
+  lastTriedAt   DateTime?                     @map("last_tried_at")
+  lastError     String?                       @map("last_error")
+  createdAt     DateTime                      @default(now()) @map("created_at")
+  updatedAt     DateTime                      @updatedAt @map("updated_at")
+
+  @@index([status, nextAttemptAt])
+  @@index([recipientId, status])
+  @@map("notification_jobs")
+}
+
+model AuditLog {
+  id         String              @id @default(cuid()) @map("id")
+  actorId    String?             @map("actor_id")
+  actor      InternalAdminUser?  @relation("InternalAuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  action     InternalAuditAction @map("action")
+  entityType String              @map("entity_type")
+  entityId   String?             @map("entity_id")
+  context    Json?               @map("context")
+  ipMasked   String?             @map("ip_masked")
+  userAgent  String?             @map("user_agent")
+  createdAt  DateTime            @default(now()) @map("created_at")
+
+  @@index([action, createdAt(sort: Desc)])
+  @@index([entityType, entityId])
+  @@index([createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
+
+enum CreditProfileType {
+  PF
+  MEI
+  PJ
+}
+
+enum CreditApplicationStatus {
+  DRAFT
+  SUBMITTED
+  IN_ANALYSIS
+  DOCUMENTS_PENDING
+  PRE_APPROVED
+  PROPOSAL_AVAILABLE
+  PROPOSAL_ACCEPTED
+  CONTRACT_GENERATED
+  CONTRACT_SIGNED
+  AWAITING_RELEASE
+  CREDIT_RELEASED
+  REFUSED
+  CANCELED
+}
+
+enum CreditRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum CreditRecommendation {
+  APPROVE
+  REVIEW_MANUALLY
+  REJECT
+}
+
+enum CreditDocumentStatus {
+  SENT
+  APPROVED
+  REJECTED
+  PENDING_REUPLOAD
+}
+
+enum CreditProposalStatus {
+  DRAFT
+  AVAILABLE
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum CreditContractStatus {
+  DRAFT
+  AVAILABLE
+  ACCEPTED
+  CANCELED
+}
+
+enum PixProvider {
+  VEXUSPAY
+  MOCK
+  EFI
+  ASAAS
+  MERCADOPAGO
+  BANCO
+}
+
+enum PixChargeStatus {
+  PENDING
+  PAID
+  EXPIRED
+  CANCELED
+  FAILED
+}
+
+enum PixChargeType {
+  INSTALLMENT
+  SETTLEMENT
+  CONTRACT_ENTRY
+  ADMIN_FEE
+}
+
+enum CreditAddressType {
+  RESIDENTIAL
+  COMMERCIAL
+}
+
+model CreditCustomerUser {
+  id           String                @id @default(cuid()) @map("id")
+  name         String                @map("name")
+  email        String                @unique @map("email")
+  phone        String?               @map("phone")
+  passwordHash String                @map("password_hash")
+  isActive     Boolean               @default(true) @map("is_active")
+  profiles     CustomerProfile[]
+  sessions     CreditClientSession[]
+  createdAt    DateTime              @default(now()) @map("created_at")
+  updatedAt    DateTime              @updatedAt @map("updated_at")
+
+  @@map("credit_customer_users")
+}
+
+model CreditClientSession {
+  id        String             @id @default(cuid()) @map("id")
+  tokenHash String             @unique @map("token_hash")
+  userId    String             @map("user_id")
+  user      CreditCustomerUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipAddress String?            @map("ip_address")
+  userAgent String?            @map("user_agent")
+  expiresAt DateTime           @map("expires_at")
+  createdAt DateTime           @default(now()) @map("created_at")
+  revokedAt DateTime?          @map("revoked_at")
+
+  @@index([userId, expiresAt])
+  @@map("credit_client_sessions")
+}
+
+model CustomerProfile {
+  id           String              @id @default(cuid()) @map("id")
+  userId       String              @map("user_id")
+  user         CreditCustomerUser  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type         CreditProfileType   @map("type")
+  document     String              @map("document")
+  name         String              @map("name")
+  email        String              @map("email")
+  phone        String              @map("phone")
+  applications CreditApplication[]
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([document])
+  @@map("customer_profiles")
+}
+
+model CreditApplication {
+  id                           String                           @id @default(cuid()) @map("id")
+  protocol                     String                           @unique @map("protocol")
+  customerId                   String                           @map("customer_id")
+  customer                     CustomerProfile                  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  profileType                  CreditProfileType                @map("profile_type")
+  status                       CreditApplicationStatus          @default(DRAFT) @map("status")
+  requestedAmount              Float                            @default(0) @map("requested_amount")
+  operationalAdjustmentPercent Float                            @default(23) @map("operational_adjustment_percent")
+  operationalAdjustmentAmount  Float                            @default(0) @map("operational_adjustment_amount")
+  estimatedNetAmount           Float                            @default(0) @map("estimated_net_amount")
+  desiredTerm                  Int                              @default(12) @map("desired_term")
+  desiredDueDay                Int?                             @map("desired_due_day")
+  purpose                      String?                          @map("purpose")
+  notes                        String?                          @map("notes")
+  consentDataProcessing        Boolean                          @default(false) @map("consent_data_processing")
+  consentContact               Boolean                          @default(false) @map("consent_contact")
+  consentTrueInfo              Boolean                          @default(false) @map("consent_true_info")
+  consentPrivacyPolicy         Boolean                          @default(false) @map("consent_privacy_policy")
+  consentCreditQuery           Boolean                          @default(false) @map("consent_credit_query")
+  consentIp                    String?                          @map("consent_ip")
+  consentUserAgent             String?                          @map("consent_user_agent")
+  consentAt                    DateTime?                        @map("consent_at")
+  submittedAt                  DateTime?                        @map("submitted_at")
+  releasedAt                   DateTime?                        @map("released_at")
+  personData                   CreditApplicationPersonData?
+  companyData                  CreditApplicationCompanyData?
+  partners                     CreditApplicationPartner[]
+  addresses                    CreditAddress[]
+  bankData                     CreditBankData?
+  documents                    CreditDocument[]
+  analysis                     CreditAnalysis?
+  proposals                    CreditProposal[]
+  contracts                    CreditContract[]
+  pixCharges                   PixCharge[]
+  history                      CreditApplicationStatusHistory[]
+  createdAt                    DateTime                         @default(now()) @map("created_at")
+  updatedAt                    DateTime                         @updatedAt @map("updated_at")
+
+  @@index([customerId, createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@index([profileType, status])
+  @@map("credit_applications")
+}
+
+model CreditApplicationPersonData {
+  id                        String            @id @default(cuid()) @map("id")
+  applicationId             String            @unique @map("application_id")
+  application               CreditApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fullName                  String?           @map("full_name")
+  cpf                       String?           @map("cpf")
+  birthDate                 DateTime?         @map("birth_date")
+  motherName                String?           @map("mother_name")
+  maritalStatus             String?           @map("marital_status")
+  nationality               String?           @map("nationality")
+  email                     String?           @map("email")
+  whatsapp                  String?           @map("whatsapp")
+  profession                String?           @map("profession")
+  incomeType                String?           @map("income_type")
+  monthlyIncome             Float?            @map("monthly_income")
+  incomeTime                String?           @map("income_time")
+  hasRestrictions           Boolean?          @map("has_restrictions")
+  hasActiveLoans            Boolean?          @map("has_active_loans")
+  currentInstallmentsAmount Float?            @map("current_installments_amount")
+  createdAt                 DateTime          @default(now()) @map("created_at")
+  updatedAt                 DateTime          @updatedAt @map("updated_at")
+
+  @@map("credit_application_person_data")
+}
+
+model CreditApplicationCompanyData {
+  id                      String            @id @default(cuid()) @map("id")
+  applicationId           String            @unique @map("application_id")
+  application             CreditApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  responsibleName         String?           @map("responsible_name")
+  responsibleCpf          String?           @map("responsible_cpf")
+  responsibleBirthDate    DateTime?         @map("responsible_birth_date")
+  responsibleEmail        String?           @map("responsible_email")
+  responsibleWhatsapp     String?           @map("responsible_whatsapp")
+  cnpj                    String?           @map("cnpj")
+  legalName               String?           @map("legal_name")
+  tradeName               String?           @map("trade_name")
+  companyType             String?           @map("company_type")
+  openingDate             DateTime?         @map("opening_date")
+  cnae                    String?           @map("cnae")
+  activity                String?           @map("activity")
+  segment                 String?           @map("segment")
+  monthlyRevenue          Float?            @map("monthly_revenue")
+  yearlyRevenue           Float?            @map("yearly_revenue")
+  employeesCount          Int?              @map("employees_count")
+  expensesMonthly         Float?            @map("expenses_monthly")
+  averageProfit           Float?            @map("average_profit")
+  hasBusinessRestrictions Boolean?          @map("has_business_restrictions")
+  hasPartnerRestrictions  Boolean?          @map("has_partner_restrictions")
+  createdAt               DateTime          @default(now()) @map("created_at")
+  updatedAt               DateTime          @updatedAt @map("updated_at")
+
+  @@map("credit_application_company_data")
+}
+
+model CreditApplicationPartner {
+  id               String            @id @default(cuid()) @map("id")
+  applicationId    String            @map("application_id")
+  application      CreditApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  name             String            @map("name")
+  cpf              String            @map("cpf")
+  ownershipPercent Float             @default(0) @map("ownership_percent")
+  email            String?           @map("email")
+  whatsapp         String?           @map("whatsapp")
+  isAdministrator  Boolean           @default(false) @map("is_administrator")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+
+  @@index([applicationId])
+  @@map("credit_application_partners")
+}
+
+model CreditAddress {
+  id            String            @id @default(cuid()) @map("id")
+  applicationId String            @map("application_id")
+  application   CreditApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  type          CreditAddressType @map("type")
+  zipcode       String?           @map("zipcode")
+  street        String?           @map("street")
+  number        String?           @map("number")
+  complement    String?           @map("complement")
+  district      String?           @map("district")
+  city          String?           @map("city")
+  state         String?           @map("state")
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+
+  @@index([applicationId, type])
+  @@map("credit_addresses")
+}
+
+model CreditBankData {
+  id                 String            @id @default(cuid()) @map("id")
+  applicationId      String            @unique @map("application_id")
+  application        CreditApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  bank               String?           @map("bank")
+  agency             String?           @map("agency")
+  account            String?           @map("account")
+  accountDigit       String?           @map("account_digit")
+  accountType        String?           @map("account_type")
+  holderName         String?           @map("holder_name")
+  holderDocument     String?           @map("holder_document")
+  pixKey             String?           @map("pix_key")
+  ownershipConfirmed Boolean           @default(false) @map("ownership_confirmed")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+
+  @@map("credit_bank_data")
+}
+
+model CreditDocument {
+  id            String               @id @default(cuid()) @map("id")
+  applicationId String               @map("application_id")
+  application   CreditApplication    @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  type          String               @map("type")
+  fileUrl       String               @map("file_url")
+  fileName      String               @map("file_name")
+  mimeType      String               @map("mime_type")
+  size          Int                  @map("size")
+  status        CreditDocumentStatus @default(SENT) @map("status")
+  uploadedAt    DateTime             @default(now()) @map("uploaded_at")
+  reviewedAt    DateTime?            @map("reviewed_at")
+  reviewedBy    String?              @map("reviewed_by")
+  note          String?              @map("note")
+
+  @@index([applicationId, type])
+  @@index([status, uploadedAt(sort: Desc)])
+  @@map("credit_documents")
+}
+
+model CreditAnalysis {
+  id              String               @id @default(cuid()) @map("id")
+  applicationId   String               @unique @map("application_id")
+  application     CreditApplication    @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  score           Int                  @default(0) @map("score")
+  riskLevel       CreditRiskLevel      @default(MEDIUM) @map("risk_level")
+  recommendation  CreditRecommendation @default(REVIEW_MANUALLY) @map("recommendation")
+  suggestedAmount Float                @default(0) @map("suggested_amount")
+  suggestedTerm   Int                  @default(12) @map("suggested_term")
+  reasons         Json?                @map("reasons")
+  internalNotes   String?              @map("internal_notes")
+  createdAt       DateTime             @default(now()) @map("created_at")
+  updatedAt       DateTime             @updatedAt @map("updated_at")
+
+  @@map("credit_analyses")
+}
+
+model CreditProposal {
+  id                           String               @id @default(cuid()) @map("id")
+  applicationId                String               @map("application_id")
+  application                  CreditApplication    @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  requestedAmount              Float                @default(0) @map("requested_amount")
+  suggestedAmount              Float                @default(0) @map("suggested_amount")
+  estimatedNetAmount           Float                @default(0) @map("estimated_net_amount")
+  operationalAdjustmentPercent Float                @default(23) @map("operational_adjustment_percent")
+  operationalAdjustmentAmount  Float                @default(0) @map("operational_adjustment_amount")
+  term                         Int                  @default(12) @map("term")
+  installmentAmount            Float                @default(0) @map("installment_amount")
+  interestRate                 Float                @default(0) @map("interest_rate")
+  cet                          Float                @default(0) @map("cet")
+  iofAmount                    Float                @default(0) @map("iof_amount")
+  dueDay                       Int?                 @map("due_day")
+  validUntil                   DateTime?            @map("valid_until")
+  status                       CreditProposalStatus @default(DRAFT) @map("status")
+  availableAt                  DateTime?            @map("available_at")
+  acceptedAt                   DateTime?            @map("accepted_at")
+  rejectedAt                   DateTime?            @map("rejected_at")
+  contracts                    CreditContract[]
+  createdAt                    DateTime             @default(now()) @map("created_at")
+  updatedAt                    DateTime             @updatedAt @map("updated_at")
+
+  @@index([applicationId, createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("credit_proposals")
+}
+
+model CreditContract {
+  id                String               @id @default(cuid()) @map("id")
+  applicationId     String               @map("application_id")
+  application       CreditApplication    @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  proposalId        String?              @map("proposal_id")
+  proposal          CreditProposal?      @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+  contractNumber    String               @unique @map("contract_number")
+  content           String               @map("content")
+  status            CreditContractStatus @default(DRAFT) @map("status")
+  acceptedAt        DateTime?            @map("accepted_at")
+  acceptedIp        String?              @map("accepted_ip")
+  acceptedUserAgent String?              @map("accepted_user_agent")
+  pixCharges        PixCharge[]
+  createdAt         DateTime             @default(now()) @map("created_at")
+  updatedAt         DateTime             @updatedAt @map("updated_at")
+
+  @@index([applicationId, createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("credit_contracts")
+}
+
+model PixCharge {
+  id            String             @id @default(cuid()) @map("id")
+  applicationId String?            @map("application_id")
+  application   CreditApplication? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  contractId    String?            @map("contract_id")
+  contract      CreditContract?    @relation(fields: [contractId], references: [id], onDelete: SetNull)
+  provider      PixProvider        @default(VEXUSPAY) @map("provider")
+  type          PixChargeType      @map("type")
+  status        PixChargeStatus    @default(PENDING) @map("status")
+  amount        Float              @map("amount")
+  description   String?            @map("description")
+  externalId    String?            @unique @map("external_id")
+  qrCode        String?            @map("qr_code")
+  copyPaste     String?            @map("copy_paste")
+  expiresAt     DateTime?          @map("expires_at")
+  paidAt        DateTime?          @map("paid_at")
+  metadata      Json?              @map("metadata")
+  events        PaymentEvent[]
+  createdAt     DateTime           @default(now()) @map("created_at")
+  updatedAt     DateTime           @updatedAt @map("updated_at")
+
+  @@index([applicationId, createdAt(sort: Desc)])
+  @@index([contractId, createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@map("pix_charges")
+}
+
+model PaymentEvent {
+  id          String           @id @default(cuid()) @map("id")
+  pixChargeId String           @map("pix_charge_id")
+  pixCharge   PixCharge        @relation(fields: [pixChargeId], references: [id], onDelete: Cascade)
+  eventType   String           @map("event_type")
+  status      PixChargeStatus? @map("status")
+  payload     Json?            @map("payload")
+  createdAt   DateTime         @default(now()) @map("created_at")
+
+  @@index([pixChargeId, createdAt(sort: Desc)])
+  @@map("payment_events")
+}
+
+model CreditApplicationStatusHistory {
+  id            String                   @id @default(cuid()) @map("id")
+  applicationId String                   @map("application_id")
+  application   CreditApplication        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  fromStatus    CreditApplicationStatus? @map("from_status")
+  toStatus      CreditApplicationStatus  @map("to_status")
+  note          String?                  @map("note")
+  actorType     String?                  @map("actor_type")
+  actorId       String?                  @map("actor_id")
+  createdAt     DateTime                 @default(now()) @map("created_at")
+
+  @@index([applicationId, createdAt(sort: Desc)])
+  @@map("credit_application_status_history")
+}
+
+model AdminCreditRule {
+  id                                  String   @id @default(cuid()) @map("id")
+  minAmountPf                         Float    @default(500) @map("min_amount_pf")
+  maxAmountPf                         Float    @default(50000) @map("max_amount_pf")
+  minAmountMei                        Float    @default(1000) @map("min_amount_mei")
+  maxAmountMei                        Float    @default(120000) @map("max_amount_mei")
+  minAmountPj                         Float    @default(2000) @map("min_amount_pj")
+  maxAmountPj                         Float    @default(500000) @map("max_amount_pj")
+  defaultOperationalAdjustmentPercent Float    @default(23) @map("default_operational_adjustment_percent")
+  minScore                            Int      @default(600) @map("min_score")
+  minTerm                             Int      @default(3) @map("min_term")
+  maxTerm                             Int      @default(48) @map("max_term")
+  defaultInterestRate                 Float    @default(2.99) @map("default_interest_rate")
+  analysisMessage                     String   @default("Sua solicitação foi enviada e está em análise.") @map("analysis_message")
+  preApprovedMessage                  String   @default("Sua solicitação recebeu uma pré-aprovação. A contratação depende da validação final dos dados, documentos e aceite da proposta.") @map("pre_approved_message")
+  refusedMessage                      String   @default("No momento, não conseguimos avançar com sua solicitação.") @map("refused_message")
+  pendingDocumentsMessage             String   @default("Precisamos de documentos adicionais para continuar sua análise.") @map("pending_documents_message")
+  releasedMessage                     String   @default("Seu crédito foi liberado. A previsão de crédito em conta será exibida conforme os dados bancários informados e a confirmação operacional da Credpagos.") @map("released_message")
+  createdAt                           DateTime @default(now()) @map("created_at")
+  updatedAt                           DateTime @updatedAt @map("updated_at")
+
+  @@map("admin_credit_rules")
+}

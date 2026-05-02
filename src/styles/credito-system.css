@@ -1,0 +1,1395 @@
+.credpagos-credito-page {
+  width: min(1200px, calc(100% - 2rem));
+  margin: 120px auto;
+  padding: 7.5rem 0 4rem;
+  color: #1e1e1e;
+}
+
+.credpagos-credito-container {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.credpagos-credito-header {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.credpagos-credito-eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.credpagos-credito-title {
+  font-size: clamp(1.65rem, 2.6vw, 2.2rem);
+  line-height: 1.1;
+  color: #0f172a;
+}
+
+.credpagos-credito-subtitle {
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.credpagos-credito-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.credpagos-credito-grid--profiles {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.credpagos-credito-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+}
+
+.credpagos-credito-card--profile {
+  padding: 1.1rem;
+  display: grid;
+  gap: 0.75rem;
+  min-height: 100%;
+}
+
+.credpagos-credito-card--profile:hover {
+  border-color: #bfdbfe;
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.12);
+}
+
+.credpagos-credito-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.credpagos-credito-card-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.credpagos-credito-card-description {
+  color: #475569;
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.credpagos-credito-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 46px;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease;
+}
+
+.credpagos-credito-button:hover {
+  transform: translateY(-1px);
+}
+
+.credpagos-credito-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.credpagos-credito-button--primary {
+  background: #5493ff;
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(84, 147, 255, 0.28);
+}
+
+.credpagos-credito-button--ghost {
+  background: #fff;
+  color: #1e3a8a;
+  border: 1px solid #cbd5e1;
+}
+
+.credpagos-credito-button--danger {
+  background: #dc2626;
+  color: #fff;
+}
+
+.credpagos-wizard-wrapper {
+  display: grid;
+  gap: 1rem;
+}
+
+.credpagos-wizard-progress {
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.credpagos-wizard-progress-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.credpagos-wizard-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #5493ff 0%, #2c6de8 100%);
+  transition: width 0.25s ease;
+}
+
+.credpagos-wizard-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.credpagos-wizard-step {
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.credpagos-wizard-step.is-active {
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.credpagos-wizard-content {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07);
+  display: grid;
+  gap: 1rem;
+}
+
+.credpagos-wizard-step-title {
+  font-size: 1.2rem;
+  color: #0f172a;
+}
+
+.credpagos-wizard-step-description {
+  color: #475569;
+  font-size: 0.93rem;
+}
+
+.credpagos-wizard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.credpagos-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.credpagos-form-grid--one {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.credpagos-form-group {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.credpagos-form-label {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.credpagos-form-input,
+.credpagos-form-select,
+.credpagos-form-textarea {
+  min-height: 44px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+  padding: 0.62rem 0.72rem;
+  font-size: 0.93rem;
+}
+
+.credpagos-form-textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.credpagos-form-input:focus,
+.credpagos-form-select:focus,
+.credpagos-form-textarea:focus {
+  outline: 2px solid rgba(84, 147, 255, 0.2);
+  border-color: #5493ff;
+}
+
+.credpagos-form-error {
+  color: #b91c1c;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.credpagos-form-checkboxes {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.credpagos-form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  color: #334155;
+  font-size: 0.85rem;
+}
+
+.credpagos-form-check input {
+  margin-top: 0.18rem;
+}
+
+.credpagos-form-inline {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.credpagos-status-card {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 14px;
+  padding: 0.85rem;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
+}
+
+.credpagos-analysis-loading-card {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  min-height: 420px;
+  padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+}
+
+.credpagos-analysis-loader {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  border: 8px solid #eaf2ff;
+  border-top-color: #5493ff;
+  animation: credpagos-spin 1s linear infinite;
+}
+
+.credpagos-analysis-loader span {
+  position: absolute;
+  inset: 18px;
+  border-radius: inherit;
+  border: 2px solid rgba(84, 147, 255, 0.28);
+}
+
+.credpagos-analysis-loader span:nth-child(2) {
+  inset: 30px;
+  border-color: rgba(22, 163, 74, 0.32);
+}
+
+.credpagos-analysis-loader span:nth-child(3) {
+  inset: 40px;
+  background: #5493ff;
+  border: 0;
+}
+
+.credpagos-analysis-loading-copy {
+  display: grid;
+  gap: 0.55rem;
+  max-width: 720px;
+}
+
+.credpagos-analysis-loading-copy h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(1.65rem, 4vw, 2.55rem);
+  line-height: 1.05;
+}
+
+.credpagos-analysis-loading-copy p {
+  margin: 0;
+  color: #475569;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.credpagos-analysis-loading-list {
+  display: grid;
+  gap: 0.75rem;
+  width: min(100%, 620px);
+}
+
+.credpagos-analysis-loading-item {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem;
+  text-align: left;
+}
+
+.credpagos-analysis-loading-item span {
+  position: relative;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.credpagos-analysis-loading-item span::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 42%;
+  border-radius: inherit;
+  background: #5493ff;
+  animation: credpagos-loading-bar 1.35s ease-in-out infinite;
+}
+
+.credpagos-analysis-loading-item:nth-child(2) span::after {
+  animation-delay: 0.16s;
+}
+
+.credpagos-analysis-loading-item:nth-child(3) span::after {
+  animation-delay: 0.32s;
+}
+
+.credpagos-analysis-loading-item:nth-child(4) span::after {
+  animation-delay: 0.48s;
+}
+
+.credpagos-analysis-loading-item strong {
+  color: #0f172a;
+  font-size: 0.95rem;
+}
+
+@keyframes credpagos-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes credpagos-loading-bar {
+  0% {
+    transform: translateX(-110%);
+  }
+  50% {
+    transform: translateX(70%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.credpagos-approval-flow {
+  display: grid;
+  gap: 1rem;
+}
+
+.credpagos-approval-card {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid #bbf7d0;
+  border-radius: 18px;
+  background: #ffffff;
+  padding: clamp(1rem, 3vw, 1.4rem);
+  box-shadow: 0 18px 44px rgba(22, 101, 52, 0.11);
+}
+
+.credpagos-approval-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.credpagos-approval-kicker {
+  margin: 0 0 0.25rem;
+  color: #166534;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.credpagos-approval-hero h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(1.65rem, 3vw, 2.4rem);
+  line-height: 1.05;
+}
+
+.credpagos-approval-hero p {
+  margin: 0.45rem 0 0;
+  max-width: 680px;
+  color: #475569;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.credpagos-approval-amount {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+}
+
+.credpagos-approval-amount span,
+.credpagos-approval-grid span {
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.credpagos-approval-amount strong {
+  color: #14532d;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1;
+}
+
+.credpagos-approval-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.credpagos-approval-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.credpagos-approval-grid div {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.8rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.credpagos-approval-grid strong {
+  color: #0f172a;
+  font-size: 0.95rem;
+}
+
+.credpagos-pix-simulation-card {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 18px;
+  background: #ffffff;
+  padding: clamp(1rem, 3vw, 1.4rem);
+  box-shadow: 0 18px 44px rgba(37, 99, 235, 0.1);
+}
+
+.credpagos-pix-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.credpagos-pix-payment-badge {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.credpagos-pix-payment-badge--pending {
+  border-color: #fed7aa;
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.credpagos-pix-payment-badge--paid {
+  border-color: #bbf7d0;
+  background: #ecfdf5;
+  color: #166534;
+}
+
+.credpagos-pix-simulation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.credpagos-pix-simulation-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.credpagos-pix-simulation-content h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(1.65rem, 3vw, 2.4rem);
+  line-height: 1.05;
+}
+
+.credpagos-pix-simulation-content p {
+  margin: 0;
+  max-width: 680px;
+  color: #475569;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.credpagos-pix-refund-highlight {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid #86efac;
+  border-left: 6px solid #16a34a;
+  border-radius: 14px;
+  background: #ecfdf5;
+  box-shadow: 0 12px 28px rgba(22, 163, 74, 0.12);
+}
+
+.credpagos-pix-refund-highlight span {
+  color: #166534;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.credpagos-pix-refund-highlight strong {
+  color: #052e16;
+  font-size: clamp(1rem, 2vw, 1.18rem);
+  line-height: 1.35;
+}
+
+.credpagos-pix-qr {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 4px;
+  width: 220px;
+  aspect-ratio: 1;
+  padding: 14px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.credpagos-pix-qr--image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.credpagos-pix-qr-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: #ffffff !important;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.credpagos-pix-qr span {
+  border-radius: 3px;
+  background: #e2e8f0;
+}
+
+.credpagos-pix-qr span.is-active {
+  background: #0f172a;
+}
+
+.credpagos-pix-qr span.credpagos-pix-qr-image {
+  background-color: #ffffff !important;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.credpagos-pix-qr-placeholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: transparent !important;
+  color: #475569;
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.credpagos-pix-status-note {
+  margin: 0;
+  color: #1e40af;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.credpagos-pix-error-box {
+  display: grid;
+  gap: 0.7rem;
+  justify-items: start;
+}
+
+.credpagos-status-badge {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.credpagos-status-badge--neutral {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.credpagos-status-badge--warning {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.credpagos-status-badge--success {
+  background: #ecfdf5;
+  color: #166534;
+  border-color: #86efac;
+}
+
+.credpagos-status-badge--danger {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+.credpagos-status-timeline {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.credpagos-status-timeline-item {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 0.55rem;
+}
+
+.credpagos-status-timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  margin-top: 0.2rem;
+  background: #cbd5e1;
+}
+
+.credpagos-status-timeline-dot.is-active {
+  background: #5493ff;
+}
+
+.credpagos-admin-dashboard {
+  display: grid;
+  gap: 1rem;
+}
+
+.credpagos-admin-metrics {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.credpagos-admin-metric {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  padding: 0.8rem;
+}
+
+.credpagos-admin-metric-label {
+  color: #64748b;
+  font-size: 0.79rem;
+  font-weight: 600;
+}
+
+.credpagos-admin-metric-value {
+  color: #0f172a;
+  font-size: 1.24rem;
+  font-weight: 800;
+}
+
+.credpagos-admin-filter {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.credpagos-admin-table-wrap {
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.credpagos-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.credpagos-admin-table th,
+.credpagos-admin-table td {
+  text-align: left;
+  padding: 0.65rem 0.7rem;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.85rem;
+  vertical-align: top;
+}
+
+.credpagos-admin-table th {
+  color: #475569;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.credpagos-admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.credpagos-doc-upload {
+  border: 1px dashed #bfdbfe;
+  border-radius: 12px;
+  padding: 0.7rem;
+  background: #f8fbff;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.credpagos-doc-upload-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.55rem 0.6rem;
+}
+
+.credpagos-doc-upload-meta {
+  color: #64748b;
+  font-size: 0.77rem;
+}
+
+.credpagos-p {
+  color: #1e1e1e;
+}
+
+.credpagos-proposta-card,
+.credpagos-contrato-preview,
+.credpagos-pix-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.credpagos-contrato-preview pre {
+  margin: 0;
+  max-height: 280px;
+  overflow: auto;
+  padding: 0.7rem;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.credpagos-key-value {
+  display: grid;
+  gap: 0.25rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.credpagos-key-value span {
+  color: #475569;
+  font-size: 0.84rem;
+}
+
+.credpagos-key-value strong {
+  color: #0f172a;
+  font-size: 0.9rem;
+}
+
+.credpagos-alert {
+  border-radius: 12px;
+  border: 1px solid #dbeafe;
+  background: #eff6ff;
+  color: #1e3a8a;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.credpagos-alert--error {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.credpagos-empty {
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 1.1rem;
+  color: #64748b;
+  text-align: center;
+  background: #fff;
+}
+
+@media (max-width: 1080px) {
+  .credpagos-admin-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .credpagos-admin-filter {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 920px) {
+  .credpagos-credito-page {
+    padding-top: 6.8rem;
+  }
+
+  .credpagos-credito-grid--profiles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .credpagos-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .credpagos-wizard-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .credpagos-credito-button {
+    width: 100%;
+  }
+
+  .credpagos-approval-hero {
+    display: grid;
+  }
+
+  .credpagos-approval-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .credpagos-analysis-loading-item {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: center;
+  }
+
+  .credpagos-pix-simulation-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .credpagos-pix-topline {
+    display: grid;
+    justify-items: start;
+  }
+
+  .credpagos-pix-qr {
+    width: min(100%, 260px);
+  }
+}
+
+
+/*====================
+Simulador
+====================*/
+
+.credpagos-request-step {
+  display: grid;
+  gap: 28px;
+}
+
+.credpagos-simulator-card,
+.credpagos-request-required-card {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+}
+
+.credpagos-simulator-card {
+  display: grid;
+  gap: 28px;
+  padding: clamp(24px, 4vw, 42px);
+}
+
+.credpagos-request-required-card {
+  display: grid;
+  gap: 24px;
+  padding: clamp(22px, 3vw, 34px);
+}
+
+.credpagos-simulator-header {
+  max-width: 760px;
+}
+
+.credpagos-simulator-title {
+  margin: 0;
+  color: #111827;
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 850;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.credpagos-simulator-description {
+  margin: 14px 0 0;
+  max-width: 680px;
+  color: #5d6475;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.credpagos-simulator-amount-box {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 22px 16px 8px;
+  text-align: center;
+}
+
+.credpagos-simulator-amount-label {
+  color: #5d6475;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.credpagos-simulator-amount {
+  color: #111827;
+  font-size: clamp(42px, 7vw, 82px);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+
+.credpagos-simulator-amount-helper {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.credpagos-simulator-range-wrap {
+  --credpagos-range-progress: 0%;
+  display: grid;
+  gap: 14px;
+  width: 100%;
+  padding: 8px 0 2px;
+}
+
+.credpagos-simulator-range {
+  width: 100%;
+  height: 8px;
+  appearance: none;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(
+    90deg,
+    #5493ff 0%,
+    #5493ff var(--credpagos-range-progress),
+    #e5e7eb var(--credpagos-range-progress),
+    #e5e7eb 100%
+  );
+}
+
+.credpagos-simulator-range::-webkit-slider-thumb {
+  width: 36px;
+  height: 36px;
+  appearance: none;
+  border: 6px solid #ffffff;
+  border-radius: 999px;
+  background: #5493ff;
+  box-shadow: 0 12px 32px rgba(84, 147, 255, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.credpagos-simulator-range::-webkit-slider-thumb:hover {
+  transform: scale(1.08);
+  box-shadow: 0 16px 42px rgba(84, 147, 255, 0.45);
+}
+
+.credpagos-simulator-range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border: 6px solid #ffffff;
+  border-radius: 999px;
+  background: #5493ff;
+  box-shadow: 0 12px 32px rgba(84, 147, 255, 0.35);
+  cursor: pointer;
+}
+
+.credpagos-simulator-range-values {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #7b8190;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.credpagos-simulator-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.credpagos-simulator-summary-card {
+  padding: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 20px;
+  background: #f8fafc;
+}
+
+.credpagos-simulator-summary-card span {
+  display: block;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.credpagos-simulator-summary-card strong {
+  display: block;
+  margin-top: 8px;
+  color: #111827;
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 850;
+  letter-spacing: -0.03em;
+}
+
+.credpagos-simulator-summary-card p {
+  margin: 8px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.credpagos-simulator-notice {
+  padding: 16px 18px;
+  border: 1px solid rgba(84, 147, 255, 0.18);
+  border-radius: 18px;
+  background: rgba(84, 147, 255, 0.08);
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.credpagos-simulator-notice strong {
+  color: #111827;
+}
+
+.credpagos-simulator-notice--warning {
+  border-color: rgba(22, 163, 74, 0.32);
+  background: rgba(220, 252, 231, 0.72);
+  color: #14532d;
+}
+
+.credpagos-form-span-full {
+  grid-column: 1 / -1;
+}
+
+.credpagos-consent-errors {
+  display: grid;
+  gap: 6px;
+}
+
+@media (max-width: 1024px) {
+  .credpagos-simulator-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .credpagos-simulator-card,
+  .credpagos-request-required-card {
+    border-radius: 22px;
+  }
+
+  .credpagos-simulator-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .credpagos-simulator-amount {
+    font-size: 44px;
+  }
+
+  .credpagos-simulator-range::-webkit-slider-thumb {
+    width: 32px;
+    height: 32px;
+  }
+}
+  
+
+/*====================
+Upload
+====================*/
+.credpagos-doc-upload {
+  display: grid;
+  gap: 24px;
+}
+
+.credpagos-doc-upload-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.credpagos-doc-upload-counter {
+  min-width: 170px;
+  padding: 18px;
+  border: 1px solid rgba(84, 147, 255, 0.16);
+  border-radius: 20px;
+  background: rgba(84, 147, 255, 0.08);
+  text-align: center;
+}
+
+.credpagos-doc-upload-counter strong {
+  display: block;
+  color: #111827;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.credpagos-doc-upload-counter span {
+  display: block;
+  margin-top: 6px;
+  color: #5d6475;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.credpagos-doc-upload-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.credpagos-doc-upload-card {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.06);
+}
+
+.credpagos-doc-upload-card-content {
+  display: grid;
+  gap: 14px;
+}
+
+.credpagos-doc-upload-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.credpagos-doc-upload-title {
+  margin: 0;
+  color: #111827;
+  font-size: 17px;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.credpagos-doc-upload-description {
+  margin: 7px 0 0;
+  color: #5d6475;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.credpagos-doc-upload-badge {
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.credpagos-doc-upload-badge--required {
+  background: rgba(84, 147, 255, 0.12);
+  color: #2563eb;
+}
+
+.credpagos-doc-upload-file {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  background: #f8fafc;
+}
+
+.credpagos-doc-upload-file-icon {
+  display: inline-flex;
+  width: 46px;
+  height: 46px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: #111827;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.credpagos-doc-upload-file-info {
+  min-width: 0;
+}
+
+.credpagos-doc-upload-file-info strong {
+  display: block;
+  overflow: hidden;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.credpagos-doc-upload-file-info span {
+  display: block;
+  margin-top: 3px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.credpagos-doc-upload-empty {
+  padding: 14px;
+  border: 1px dashed rgba(15, 23, 42, 0.16);
+  border-radius: 16px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.credpagos-doc-upload-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.credpagos-doc-upload-input {
+  display: none;
+}
+
+.credpagos-credito-button--disabled {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+@media (max-width: 768px) {
+  .credpagos-doc-upload-header {
+    display: grid;
+  }
+
+  .credpagos-doc-upload-counter {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .credpagos-doc-upload-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .credpagos-doc-upload-card {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .credpagos-doc-upload-card-top {
+    display: grid;
+  }
+
+  .credpagos-doc-upload-badge {
+    width: fit-content;
+  }
+
+  .credpagos-doc-upload-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .credpagos-doc-upload-actions .credpagos-credito-button {
+    width: 100%;
+    justify-content: center;
+  }
+}

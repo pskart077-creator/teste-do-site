@@ -1,0 +1,167 @@
+.credpago-news-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0 0.55rem;
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.credpago-news-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.8rem;
+}
+
+.credpago-news-breadcrumbs a {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.credpago-news-breadcrumbs__sep {
+  opacity: 0.45;
+}
+
+.credpago-news-rich {
+  display: grid;
+  gap: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.credpago-news-rich p,
+.credpago-news-rich li,
+.credpago-news-rich blockquote {
+  line-height: 1.8;
+}
+
+.credpago-news-rich h1,
+.credpago-news-rich h2,
+.credpago-news-rich h3,
+.credpago-news-rich h4 {
+  margin: 0.25rem 0 0;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.credpago-news-rich h1 {
+  font-size: clamp(1.95rem, 4vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.credpago-news-rich h2 {
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  line-height: 1.16;
+}
+
+.credpago-news-rich h3 {
+  font-size: clamp(1.2rem, 2.3vw, 1.55rem);
+  line-height: 1.2;
+}
+
+.credpago-news-rich h4 {
+  font-size: 1.05rem;
+  line-height: 1.28;
+}
+
+.credpago-news-rich ul,
+.credpago-news-rich ol {
+  padding-left: 1.1rem;
+}
+
+.credpago-news-rich a {
+  color: #8ce8a4;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.credpago-news-rich a:hover {
+  color: #b5f3c3;
+}
+
+.credpago-news-rich blockquote {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border-left: 4px solid rgba(59, 192, 107, 0.75);
+  background: rgba(59, 192, 107, 0.12);
+  border-radius: 10px;
+}
+
+.credpago-news-rich img {
+  max-width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.credpago-news-rich figure {
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.credpago-news-rich figcaption {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.86rem;
+}
+
+.credpago-news-rich__callout {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.credpago-news-rich__callout.is-info {
+  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.credpago-news-rich__callout.is-warning {
+  border-color: rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.credpago-news-rich__callout.is-success {
+  border-color: rgba(34, 197, 94, 0.45);
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.credpago-news-rich__faq {
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.credpago-news-rich__faq-item {
+  padding: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.credpago-news-rich__faq-item:last-child {
+  border-bottom: 0;
+}
+
+.credpago-news-rich__table-wrap {
+  overflow-x: auto;
+}
+
+.credpago-news-rich table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.credpago-news-rich th,
+.credpago-news-rich td {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0.55rem;
+  text-align: left;
+}
+
+.credpago-news-rich hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
