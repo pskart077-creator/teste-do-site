@@ -39,7 +39,7 @@ type PixPaymentStepProps = {
   onFinish: () => void;
 };
 
-const PIX_ANALYSIS_FEE_AMOUNT = 59.9;
+const PIX_ANALYSIS_FEE_AMOUNT = 19.9;
 const cashInChargeCache = new Map<string, VexusCashInChargeView>();
 const cashInChargeRequests = new Map<string, Promise<VexusCashInChargeView>>();
 
@@ -149,7 +149,7 @@ export function PixPaymentStep({
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
 
-  const transactionId = `${result.protocol}-PIX-5990-${retryCount}`;
+  const transactionId = `${result.protocol}-PIX-1990-${retryCount}`;
   const paymentBadge = isPaid ? "Aprovado" : "Pendente";
   const paymentStatus = getReadablePixStatus(
     isPaid,
