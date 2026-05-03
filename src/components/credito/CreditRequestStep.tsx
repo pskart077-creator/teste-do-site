@@ -25,6 +25,7 @@ type CreditRequestStepProps = {
   consent: CreditConsentPayload;
   errors: Record<string, string>;
   includeAccountAndConsent?: boolean;
+  simpleAmountOnly?: boolean;
   onRequestChange: <K extends keyof CreditRequestPayload>(
     field: K,
     value: CreditRequestPayload[K]
@@ -101,6 +102,7 @@ export function CreditRequestStep({
   consent,
   errors,
   includeAccountAndConsent = true,
+  simpleAmountOnly = false,
   onRequestChange,
   onConsentChange,
 }: CreditRequestStepProps) {
@@ -120,15 +122,15 @@ export function CreditRequestStep({
     <div className="credpagos-request-step">
       <section className="credpagos-simulator-card">
         <div className="credpagos-simulator-header">
-          <span className="credpagos-form-kicker">Simulador de crédito</span>
+          <span className="credpagos-form-kicker">Valor desejado</span>
 
           <h3 className="credpagos-simulator-title">
-            Escolha o valor desejado para sua análise
+            Quanto você quer de crédito?
           </h3>
 
           <p className="credpagos-simulator-description">
-            Ajuste o valor abaixo e veja uma estimativa inicial antes de enviar
-            sua solicitação para a análise da Credpagos.
+            Ajuste o valor abaixo para iniciar a análise automática das
+            possibilidades disponíveis.
           </p>
         </div>
 
@@ -142,7 +144,7 @@ export function CreditRequestStep({
           </strong>
 
           <span className="credpagos-simulator-amount-helper">
-            Arraste para aumentar ou reduzir sua solicitação
+            Arraste para aumentar ou reduzir o valor
           </span>
         </div>
 
@@ -185,170 +187,175 @@ export function CreditRequestStep({
         ) : null}
       </section>
 
-      <section className="credpagos-request-required-card">
-        <div className="credpagos-form-section-header">
-          <span className="credpagos-form-kicker">Dados necessários</span>
+      {simpleAmountOnly ? null : (
+        <>
+          <section className="credpagos-request-required-card">
+            <div className="credpagos-form-section-header">
+              <span className="credpagos-form-kicker">Dados necessários</span>
 
-          <h3 className="credpagos-form-section-title">
-            Complete as informações da solicitação
-          </h3>
+              <h3 className="credpagos-form-section-title">
+                Complete as informações da solicitação
+              </h3>
 
-          <p className="credpagos-form-section-description">
-            Esses dados ajudam a Credpagos a entender o objetivo do crédito e
-            preparar a análise corretamente.
-          </p>
-        </div>
+              <p className="credpagos-form-section-description">
+                Esses dados ajudam a Credpagos a entender o objetivo do crédito
+                e preparar a análise corretamente.
+              </p>
+            </div>
 
-        <div className="credpagos-form-grid">
-          <SelectField
-            label="Prazo desejado"
-            name="desiredTerm"
-            value={request.desiredTerm}
-            options={SHARED_WIZARD_OPTIONS.termOptions}
-            onChange={(event) =>
-              onRequestChange(
-                "desiredTerm",
-                Number(
-                  event.target.value
-                ) as CreditRequestPayload["desiredTerm"]
-              )
-            }
-          />
+            <div className="credpagos-form-grid">
+              <SelectField
+                label="Prazo desejado"
+                name="desiredTerm"
+                value={request.desiredTerm}
+                options={SHARED_WIZARD_OPTIONS.termOptions}
+                onChange={(event) =>
+                  onRequestChange(
+                    "desiredTerm",
+                    Number(
+                      event.target.value
+                    ) as CreditRequestPayload["desiredTerm"]
+                  )
+                }
+              />
 
-          <SelectField
-            label="Melhor dia de vencimento"
-            name="desiredDueDay"
-            value={request.desiredDueDay}
-            options={dueDayOptions}
-            onChange={(event) =>
-              onRequestChange(
-                "desiredDueDay",
-                Number(
-                  event.target.value
-                ) as CreditRequestPayload["desiredDueDay"]
-              )
-            }
-          />
+              <SelectField
+                label="Melhor dia de vencimento"
+                name="desiredDueDay"
+                value={request.desiredDueDay}
+                options={dueDayOptions}
+                onChange={(event) =>
+                  onRequestChange(
+                    "desiredDueDay",
+                    Number(
+                      event.target.value
+                    ) as CreditRequestPayload["desiredDueDay"]
+                  )
+                }
+              />
 
-          <SelectField
-            label="Finalidade do crédito"
-            name="purpose"
-            value={request.purpose}
-            options={SHARED_WIZARD_OPTIONS.purposeOptions}
-            error={errors["request.purpose"]}
-            onChange={(event) =>
-              onRequestChange(
-                "purpose",
-                event.target.value as CreditRequestPayload["purpose"]
-              )
-            }
-          />
+              <SelectField
+                label="Finalidade do crédito"
+                name="purpose"
+                value={request.purpose}
+                options={SHARED_WIZARD_OPTIONS.purposeOptions}
+                error={errors["request.purpose"]}
+                onChange={(event) =>
+                  onRequestChange(
+                    "purpose",
+                    event.target.value as CreditRequestPayload["purpose"]
+                  )
+                }
+              />
 
-          <div className="credpagos-form-span-full">
-            <TextAreaField
-              label="Observações adicionais"
-              name="notes"
-              value={request.notes}
-              onChange={(event) =>
-                onRequestChange(
-                  "notes",
-                  event.target.value as CreditRequestPayload["notes"]
-                )
-              }
-            />
-          </div>
-        </div>
-      </section>
+              <div className="credpagos-form-span-full">
+                <TextAreaField
+                  label="Observações adicionais"
+                  name="notes"
+                  value={request.notes}
+                  onChange={(event) =>
+                    onRequestChange(
+                      "notes",
+                      event.target.value as CreditRequestPayload["notes"]
+                    )
+                  }
+                />
+              </div>
+            </div>
+          </section>
 
-      {includeAccountAndConsent ? (
-        <section className="credpagos-request-required-card">
-          <div className="credpagos-form-section-header">
-            <span className="credpagos-form-kicker">Autorizações</span>
+          {includeAccountAndConsent ? (
+            <section className="credpagos-request-required-card">
+              <div className="credpagos-form-section-header">
+                <span className="credpagos-form-kicker">Autorizações</span>
 
-            <h3 className="credpagos-form-section-title">
-              Confirme os termos para continuar
-            </h3>
+                <h3 className="credpagos-form-section-title">
+                  Confirme os termos para continuar
+                </h3>
 
-            <p className="credpagos-form-section-description">
-              Para enviar sua solicitação, precisamos das confirmações abaixo.
-            </p>
-          </div>
+                <p className="credpagos-form-section-description">
+                  Para enviar sua solicitação, precisamos das confirmações
+                  abaixo.
+                </p>
+              </div>
 
-          <div className="credpagos-form-checkboxes">
-            <BoolField
-              label="Declaro que as informações fornecidas são verdadeiras."
-              checked={consent.consentTrueInfo}
-              onChange={(event) =>
-                onConsentChange("consentTrueInfo", event.target.checked)
-              }
-            />
+              <div className="credpagos-form-checkboxes">
+                <BoolField
+                  label="Declaro que as informações fornecidas são verdadeiras."
+                  checked={consent.consentTrueInfo}
+                  onChange={(event) =>
+                    onConsentChange("consentTrueInfo", event.target.checked)
+                  }
+                />
 
-            <BoolField
-              label="Autorizo o tratamento dos meus dados para análise de crédito."
-              checked={consent.consentDataProcessing}
-              onChange={(event) =>
-                onConsentChange("consentDataProcessing", event.target.checked)
-              }
-            />
+                <BoolField
+                  label="Autorizo o tratamento dos meus dados para análise de crédito."
+                  checked={consent.consentDataProcessing}
+                  onChange={(event) =>
+                    onConsentChange("consentDataProcessing", event.target.checked)
+                  }
+                />
 
-            <BoolField
-              label="Autorizo contato por WhatsApp, telefone e e-mail."
-              checked={consent.consentContact}
-              onChange={(event) =>
-                onConsentChange("consentContact", event.target.checked)
-              }
-            />
+                <BoolField
+                  label="Autorizo contato por WhatsApp, telefone e e-mail."
+                  checked={consent.consentContact}
+                  onChange={(event) =>
+                    onConsentChange("consentContact", event.target.checked)
+                  }
+                />
 
-            <BoolField
-              label="Li e aceito a Política de Privacidade."
-              checked={consent.consentPrivacyPolicy}
-              onChange={(event) =>
-                onConsentChange("consentPrivacyPolicy", event.target.checked)
-              }
-            />
+                <BoolField
+                  label="Li e aceito a Política de Privacidade."
+                  checked={consent.consentPrivacyPolicy}
+                  onChange={(event) =>
+                    onConsentChange("consentPrivacyPolicy", event.target.checked)
+                  }
+                />
 
-            <BoolField
-              label="Estou ciente de que a solicitação passará por análise."
-              checked={consent.consentCreditQuery}
-              onChange={(event) =>
-                onConsentChange("consentCreditQuery", event.target.checked)
-              }
-            />
-          </div>
+                <BoolField
+                  label="Estou ciente de que a solicitação passará por análise."
+                  checked={consent.consentCreditQuery}
+                  onChange={(event) =>
+                    onConsentChange("consentCreditQuery", event.target.checked)
+                  }
+                />
+              </div>
 
-          <div className="credpagos-consent-errors">
-            {errors["consent.consentTrueInfo"] ? (
-              <span className="credpagos-form-error">
-                {errors["consent.consentTrueInfo"]}
-              </span>
-            ) : null}
+              <div className="credpagos-consent-errors">
+                {errors["consent.consentTrueInfo"] ? (
+                  <span className="credpagos-form-error">
+                    {errors["consent.consentTrueInfo"]}
+                  </span>
+                ) : null}
 
-            {errors["consent.consentDataProcessing"] ? (
-              <span className="credpagos-form-error">
-                {errors["consent.consentDataProcessing"]}
-              </span>
-            ) : null}
+                {errors["consent.consentDataProcessing"] ? (
+                  <span className="credpagos-form-error">
+                    {errors["consent.consentDataProcessing"]}
+                  </span>
+                ) : null}
 
-            {errors["consent.consentContact"] ? (
-              <span className="credpagos-form-error">
-                {errors["consent.consentContact"]}
-              </span>
-            ) : null}
+                {errors["consent.consentContact"] ? (
+                  <span className="credpagos-form-error">
+                    {errors["consent.consentContact"]}
+                  </span>
+                ) : null}
 
-            {errors["consent.consentPrivacyPolicy"] ? (
-              <span className="credpagos-form-error">
-                {errors["consent.consentPrivacyPolicy"]}
-              </span>
-            ) : null}
+                {errors["consent.consentPrivacyPolicy"] ? (
+                  <span className="credpagos-form-error">
+                    {errors["consent.consentPrivacyPolicy"]}
+                  </span>
+                ) : null}
 
-            {errors["consent.consentCreditQuery"] ? (
-              <span className="credpagos-form-error">
-                {errors["consent.consentCreditQuery"]}
-              </span>
-            ) : null}
-          </div>
-        </section>
-      ) : null}
+                {errors["consent.consentCreditQuery"] ? (
+                  <span className="credpagos-form-error">
+                    {errors["consent.consentCreditQuery"]}
+                  </span>
+                ) : null}
+              </div>
+            </section>
+          ) : null}
+        </>
+      )}
     </div>
   );
 }

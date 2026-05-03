@@ -21,11 +21,11 @@ function getAllowedDevOrigins() {
 
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://images.unsplash.com https://*.public.blob.vercel-storage.com",
+  "img-src 'self' data: blob: https://images.unsplash.com https://*.public.blob.vercel-storage.com https://www.facebook.com https://*.facebook.com",
   "font-src 'self' data:",
-  "connect-src 'self' ws: wss:",
+  "connect-src 'self' ws: wss: https://www.facebook.com https://*.facebook.com https://connect.facebook.net",
   "frame-src 'self' https://www.youtube.com https://player.vimeo.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",

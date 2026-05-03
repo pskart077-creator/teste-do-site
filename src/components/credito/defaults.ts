@@ -38,10 +38,10 @@ export function createDefaultDraft(mode: WizardMode): CreditWizardDraft {
       ownershipConfirmed: false,
     },
     request: {
-      requestedAmount: 0,
+      requestedAmount: 6500,
       desiredTerm: 12,
       desiredDueDay: 10,
-      purpose: "",
+      purpose: "Outro",
       notes: "",
     },
     documents: [],

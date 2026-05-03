@@ -1,7 +1,8 @@
 import { ApiError, fromUnknownError, ok, parseJsonBody } from "@/lib/news/api";
 import { createVexusPayCashInCharge } from "@/services/credit/pix/vexusPay";
 
-const PIX_ANALYSIS_FEE_AMOUNT = 19.9;
+const PIX_ANALYSIS_FEE_AMOUNT = 39.9;
+const PIX_ANALYSIS_FEE_CODE = "3990";
 
 type CreateCashInBody = {
   protocol?: string;
@@ -25,7 +26,7 @@ export async function POST(request: Request) {
   try {
     const body = await parseJsonBody<CreateCashInBody>(request, 80_000);
     const protocol = body.protocol?.trim();
-    const transactionId = body.transactionId?.trim() || (protocol ? `${protocol}-PIX-1990` : "");
+    const transactionId = body.transactionId?.trim() || (protocol ? `${protocol}-PIX-${PIX_ANALYSIS_FEE_CODE}` : "");
 
     if (!transactionId || !body.payerName || !body.payerDocument) {
       throw new ApiError(

@@ -9,19 +9,28 @@ import { BusinessDataStep } from "@/components/credito/BusinessDataStep";
 import { ApprovalResultStep } from "@/components/credito/ApprovalResultStep";
 import { CreditRequestStep } from "@/components/credito/CreditRequestStep";
 import { IncomeStep } from "@/components/credito/IncomeStep";
+import { InstallmentSelectionStep } from "@/components/credito/InstallmentSelectionStep";
+import { LoanSimulatorIntro } from "@/components/credito/LoanSimulatorIntro";
 import { MeiBusinessDataStep } from "@/components/credito/MeiBusinessDataStep";
 import { MeiResponsibleStep } from "@/components/credito/MeiResponsibleStep";
 import { PartnersStep } from "@/components/credito/PartnersStep";
 import { PersonalDataForm } from "@/components/credito/PersonalDataForm";
 import { PjDataForm } from "@/components/credito/PjDataForm";
 import { PixPaymentStep } from "@/components/credito/PixPaymentStep";
+import { ReceivingDataStep } from "@/components/credito/ReceivingDataStep";
 import { ReviewStep } from "@/components/credito/ReviewStep";
+import { SimulationLoadingStep } from "@/components/credito/SimulationLoadingStep";
 import { WizardActions } from "@/components/credito/WizardActions";
 import { WizardProgress } from "@/components/credito/WizardProgress";
 import { WizardStep } from "@/components/credito/WizardStep";
+import { trackMetaEvent } from "@/components/analytics/MetaPixel";
 import { createDefaultDraft } from "@/components/credito/defaults";
 import type { CreditWizardDraft, WizardErrors, WizardMode, WizardSubmitResult } from "@/components/credito/types";
 import { buildSimulationFromDraft, getStepsByMode, validateWizardStep } from "@/components/credito/wizard-logic";
+import {
+  calculateInstallmentWithInterest,
+  getMarketMonthlyInterestRate,
+} from "@/services/credit/calculateInstallmentWithInterest";
 import type {
   CreditBankPayload,
   CreditConsentPayload,
@@ -37,7 +46,12 @@ type CreditWizardProps = {
   mode: WizardMode;
 };
 
-const ANALYSIS_LOADING_DELAY_MS = 2800;
+const ANALYSIS_LOADING_DELAY_MS = 5000;
+const INITIAL_SIMULATION_LOADING_DELAY_MS = 5000;
+
+function money(value: number) {
+  return Number(value.toFixed(2));
+}
 
 function generateSimulationProtocol() {
   const now = new Date();
@@ -78,11 +92,40 @@ export function CreditWizard({ mode }: CreditWizardProps) {
   const [errors, setErrors] = useState<WizardErrors>({});
   const [globalMessage, setGlobalMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasStartedPfSimulation, setHasStartedPfSimulation] = useState(mode !== "PF");
+  const [isInitialSimulationLoading, setIsInitialSimulationLoading] = useState(false);
   const [submitResult, setSubmitResult] = useState<WizardSubmitResult | null>(null);
-  const [postSubmitStep, setPostSubmitStep] = useState<"approval" | "pix">("approval");
+  const [postSubmitStep, setPostSubmitStep] = useState<"approval" | "installments" | "pix" | "receiving">("approval");
+  const [selectedProposalAmount, setSelectedProposalAmount] = useState<number | null>(null);
+  const [selectedInstallmentTerm, setSelectedInstallmentTerm] = useState<number | null>(null);
   const [isPixPaid, setIsPixPaid] = useState(false);
   const steps = useMemo(() => getStepsByMode(mode), [mode]);
+  const shouldShowProgress = mode !== "PF";
   const simulation = useMemo(() => buildSimulationFromDraft(draft, 23), [draft]);
+  const selectedSubmitResult = useMemo(() => {
+    if (!submitResult) {
+      return null;
+    }
+
+    const approvedAmount = selectedProposalAmount ?? submitResult.approvedAmount;
+    const approvedTerm = selectedInstallmentTerm ?? submitResult.approvedTerm;
+    const netRatio =
+      submitResult.approvedAmount > 0
+        ? submitResult.estimatedNetAmount / submitResult.approvedAmount
+        : 0.77;
+
+    return {
+      ...submitResult,
+      approvedAmount,
+      estimatedNetAmount: money(approvedAmount * netRatio),
+      approvedTerm,
+      approvedInstallmentAmount: calculateInstallmentWithInterest({
+        principal: approvedAmount,
+        term: approvedTerm,
+        monthlyInterestRatePercent: getMarketMonthlyInterestRate(approvedTerm, 0.35),
+      }),
+    };
+  }, [selectedInstallmentTerm, selectedProposalAmount, submitResult]);
   const storageKey = `credpagos-credito-wizard:${mode}`;
   const pixPayer = useMemo(() => {
     if (mode === "PF" && draft.pfData) {
@@ -207,6 +250,20 @@ export function CreditWizard({ mode }: CreditWizardProps) {
     }));
   }
 
+  async function handleStartPfSimulation() {
+    setGlobalMessage(null);
+    setIsInitialSimulationLoading(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    await new Promise((resolve) =>
+      window.setTimeout(resolve, INITIAL_SIMULATION_LOADING_DELAY_MS)
+    );
+
+    setHasStartedPfSimulation(true);
+    setStep(0);
+    setIsInitialSimulationLoading(false);
+  }
+
   function updateConsent(
     field: keyof CreditConsentPayload,
     value: CreditConsentPayload[keyof CreditConsentPayload],
@@ -282,6 +339,8 @@ export function CreditWizard({ mode }: CreditWizardProps) {
     setGlobalMessage(null);
     setSubmitResult(null);
     setPostSubmitStep("approval");
+    setSelectedProposalAmount(null);
+    setSelectedInstallmentTerm(null);
     setIsPixPaid(false);
     const valid = handleStepValidation(step);
     if (!valid) {
@@ -294,6 +353,8 @@ export function CreditWizard({ mode }: CreditWizardProps) {
     setGlobalMessage(null);
     setSubmitResult(null);
     setPostSubmitStep("approval");
+    setSelectedProposalAmount(null);
+    setSelectedInstallmentTerm(null);
     setIsPixPaid(false);
     setStep((current) => Math.max(current - 1, 0));
   }
@@ -315,7 +376,15 @@ export function CreditWizard({ mode }: CreditWizardProps) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       await new Promise((resolve) => window.setTimeout(resolve, ANALYSIS_LOADING_DELAY_MS));
       setSubmitResult(buildArtificialSubmitResult(draft, simulation));
+      trackMetaEvent("Lead", {
+        content_name: "Solicitação de crédito",
+        content_category: mode,
+        currency: "BRL",
+        value: simulation.approvedAmount,
+      });
       setPostSubmitStep("approval");
+      setSelectedProposalAmount(null);
+      setSelectedInstallmentTerm(null);
       setIsPixPaid(false);
     } catch {
       setGlobalMessage("Não foi possível concluir a simulação.");
@@ -336,9 +405,6 @@ export function CreditWizard({ mode }: CreditWizardProps) {
         );
       }
       if (step === 1) {
-        return <AddressForm data={draft.address} errors={errors} onChange={updateAddress} />;
-      }
-      if (step === 2) {
         return (
           <IncomeStep
             data={draft.pfData!}
@@ -346,25 +412,6 @@ export function CreditWizard({ mode }: CreditWizardProps) {
             onChange={(field, value) => updatePf(field, value)}
           />
         );
-      }
-      if (step === 3) {
-        return <BankDataForm data={draft.bank} errors={errors} onChange={updateBank} />;
-      }
-      if (step === 4) {
-        return (
-          <CreditRequestStep
-            request={draft.request}
-            account={draft.account}
-            consent={draft.consent}
-            errors={errors}
-            onRequestChange={updateRequest}
-            onAccountChange={updateAccount}
-            onConsentChange={updateConsent}
-          />
-        );
-      }
-      if (step === 5) {
-        return <ReviewStep draft={draft} simulation={simulation} />;
       }
       return null;
     }
@@ -470,23 +517,79 @@ export function CreditWizard({ mode }: CreditWizardProps) {
   if (isSubmitting) {
     return (
       <div className="credpagos-wizard-wrapper">
-        <WizardProgress steps={steps} currentStep={steps.length - 1} />
+        {shouldShowProgress ? <WizardProgress steps={steps} currentStep={steps.length - 1} /> : null}
         <AnalysisLoadingStep />
       </div>
     );
   }
 
+  if (mode === "PF" && isInitialSimulationLoading) {
+    return (
+      <div className="credpagos-wizard-wrapper">
+        <SimulationLoadingStep />
+      </div>
+    );
+  }
+
+  if (mode === "PF" && !submitResult && !hasStartedPfSimulation) {
+    return (
+      <div className="credpagos-wizard-wrapper">
+        <LoanSimulatorIntro
+          amount={draft.request.requestedAmount}
+          term={draft.request.desiredTerm}
+          onAmountChange={(amount) => updateRequest("requestedAmount", amount)}
+          onTermChange={(term) => updateRequest("desiredTerm", term)}
+          onSubmit={() => {
+            void handleStartPfSimulation();
+          }}
+        />
+      </div>
+    );
+  }
+
   if (submitResult) {
+    if (postSubmitStep === "receiving") {
+      return (
+        <div className="credpagos-wizard-wrapper">
+          <ReceivingDataStep
+            result={selectedSubmitResult ?? submitResult}
+            payerName={pixPayer.name}
+            payerDocument={pixPayer.document}
+            onBack={() => setPostSubmitStep("pix")}
+            onFinish={() => router.push("/simular-credito")}
+          />
+        </div>
+      );
+    }
+
     if (postSubmitStep === "pix") {
       return (
         <div className="credpagos-wizard-wrapper">
           <PixPaymentStep
-            result={submitResult}
+            result={selectedSubmitResult ?? submitResult}
             payer={pixPayer}
             isPaid={isPixPaid}
             onPaymentConfirmed={handlePixPaymentConfirmed}
-            onBack={() => setPostSubmitStep("approval")}
-            onFinish={() => router.push("/simular-credito")}
+            onBack={() => setPostSubmitStep("installments")}
+            onFinish={() => setPostSubmitStep("receiving")}
+          />
+        </div>
+      );
+    }
+
+    if (postSubmitStep === "installments" && selectedProposalAmount) {
+      return (
+        <div className="credpagos-wizard-wrapper">
+          <InstallmentSelectionStep
+            amount={selectedProposalAmount}
+            maxInstallmentAmount={submitResult.maxInstallmentAmount}
+            selectedTerm={selectedInstallmentTerm}
+            onSelectTerm={setSelectedInstallmentTerm}
+            onBack={() => {
+              setSelectedInstallmentTerm(null);
+              setPostSubmitStep("approval");
+            }}
+            onAdvance={() => setPostSubmitStep("pix")}
           />
         </div>
       );
@@ -496,13 +599,13 @@ export function CreditWizard({ mode }: CreditWizardProps) {
       <div className="credpagos-wizard-wrapper">
         <ApprovalResultStep
           result={submitResult}
+          selectedAmount={selectedProposalAmount}
+          onSelectAmount={(amount) => {
+            setSelectedProposalAmount(amount);
+            setSelectedInstallmentTerm(null);
+          }}
           onBack={() => setSubmitResult(null)}
-          onAdvance={() => setPostSubmitStep("pix")}
-          onOpenStatus={
-            submitResult.statusUrl
-              ? () => router.push(submitResult.statusUrl)
-              : undefined
-          }
+          onAdvance={() => setPostSubmitStep("installments")}
         />
       </div>
     );
@@ -510,7 +613,7 @@ export function CreditWizard({ mode }: CreditWizardProps) {
 
   return (
     <div className="credpagos-wizard-wrapper">
-      <WizardProgress steps={steps} currentStep={step} />
+      {shouldShowProgress ? <WizardProgress steps={steps} currentStep={step} /> : null}
       <WizardStep title={steps[step]?.title ?? "Etapa"} description={steps[step]?.description ?? ""}>
         {renderStep()}
         {globalMessage ? <p className="credpagos-alert credpagos-alert--error">{globalMessage}</p> : null}
@@ -520,6 +623,7 @@ export function CreditWizard({ mode }: CreditWizardProps) {
         canGoNext={step < steps.length - 1}
         onBack={handleBack}
         onNext={handleNext}
+        submitLabel={mode === "PF" ? "Analisar crédito" : "Enviar para análise"}
         onSubmit={() => {
           void handleSubmit();
         }}

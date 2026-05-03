@@ -115,6 +115,13 @@ function requireMinLength(errors: WizardErrors, key: string, value: string, min:
   }
 }
 
+function requireFirstAndLastName(errors: WizardErrors, key: string, value: string, message: string) {
+  const parts = value.trim().split(/\s+/).filter(Boolean);
+  if (parts.length < 2) {
+    errors[key] = message;
+  }
+}
+
 function validateAddress(errors: WizardErrors, draft: CreditWizardDraft, requireDistrict: boolean) {
   requireMinLength(errors, "address.zipcode", draft.address.zipcode, 8, "Informe um CEP valido.");
   requireField(errors, "address.street", draft.address.street, "Informe a rua.");
@@ -166,30 +173,19 @@ export function validateWizardStep(mode: WizardMode, stepIndex: number, draft: C
 
   if (mode === "PF") {
     if (stepIndex === 0) {
-      requireField(errors, "pfData.fullName", draft.pfData?.fullName ?? "", "Informe o nome completo.");
+      requireField(errors, "pfData.fullName", draft.pfData?.fullName ?? "", "Informe o nome e sobrenome.");
+      requireFirstAndLastName(
+        errors,
+        "pfData.fullName",
+        draft.pfData?.fullName ?? "",
+        "Informe nome e sobrenome.",
+      );
       requireField(errors, "pfData.cpf", draft.pfData?.cpf ?? "", "Informe o CPF.");
       requireCpf(errors, "pfData.cpf", draft.pfData?.cpf ?? "");
       requireField(errors, "pfData.birthDate", draft.pfData?.birthDate ?? "", "Informe a data de nascimento.");
-      requireField(errors, "pfData.motherName", draft.pfData?.motherName ?? "", "Informe o nome da mae.");
-      requireField(errors, "pfData.email", draft.pfData?.email ?? "", "Informe o e-mail.");
-      requireEmail(errors, "pfData.email", draft.pfData?.email ?? "");
-      requireMinLength(errors, "pfData.whatsapp", draft.pfData?.whatsapp ?? "", 10, "Informe um WhatsApp valido.");
     }
     if (stepIndex === 1) {
-      validateAddress(errors, draft, true);
-    }
-    if (stepIndex === 2) {
-      requireField(errors, "pfData.profession", draft.pfData?.profession ?? "", "Informe a profissao.");
-      requireField(errors, "pfData.incomeType", draft.pfData?.incomeType ?? "", "Selecione o tipo de renda.");
       requireField(errors, "pfData.monthlyIncome", draft.pfData?.monthlyIncome ?? 0, "Informe a renda mensal.");
-    }
-    if (stepIndex === 3) {
-      validateBankData(errors, draft);
-    }
-    if (stepIndex === 4) {
-      requireField(errors, "request.requestedAmount", draft.request.requestedAmount, "Informe o valor desejado.");
-      requireField(errors, "request.purpose", draft.request.purpose, "Informe a finalidade.");
-      validateConsents(errors, draft);
     }
   }
 
@@ -271,7 +267,7 @@ export function buildSimulationFromDraft(draft: CreditWizardDraft, percent = 23)
         : draft.pjData?.averageProfit || draft.pjData?.monthlyRevenue || 0;
 
   return calculateCreditSimulation({
-    requestedAmount: draft.request.requestedAmount,
+    requestedAmount: draft.request.requestedAmount > 0 ? draft.request.requestedAmount : 6500,
     operationalAdjustmentPercent: percent,
     desiredTerm: draft.request.desiredTerm,
     monthlyIncome,

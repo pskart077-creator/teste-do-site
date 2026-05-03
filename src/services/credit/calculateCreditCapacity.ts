@@ -1,4 +1,9 @@
 import { money } from "@/lib/credit/helpers";
+import {
+  calculateInstallmentWithInterest,
+  calculatePrincipalFromInstallment,
+  getMarketMonthlyInterestRate,
+} from "@/services/credit/calculateInstallmentWithInterest";
 
 export const CREDIT_MAX_INSTALLMENT_PERCENT = 10;
 
@@ -22,10 +27,23 @@ export function calculateCreditCapacity(input: {
   const monthlyIncome = money(input.monthlyIncome);
   const desiredTerm = Math.max(1, Math.floor(Number(input.desiredTerm) || 1));
   const maxInstallmentAmount = money(monthlyIncome * (CREDIT_MAX_INSTALLMENT_PERCENT / 100));
-  const maxAffordableAmount = money(maxInstallmentAmount * desiredTerm);
+  const monthlyInterestRatePercent = getMarketMonthlyInterestRate(desiredTerm, 0.35);
+  const maxAffordableAmount = calculatePrincipalFromInstallment({
+    installmentAmount: maxInstallmentAmount,
+    term: desiredTerm,
+    monthlyInterestRatePercent,
+  });
   const approvedAmount = money(Math.min(requestedAmount, maxAffordableAmount));
-  const requestedInstallmentAmount = money(requestedAmount / desiredTerm);
-  const approvedInstallmentAmount = money(approvedAmount / desiredTerm);
+  const requestedInstallmentAmount = calculateInstallmentWithInterest({
+    principal: requestedAmount,
+    term: desiredTerm,
+    monthlyInterestRatePercent,
+  });
+  const approvedInstallmentAmount = calculateInstallmentWithInterest({
+    principal: approvedAmount,
+    term: desiredTerm,
+    monthlyInterestRatePercent,
+  });
 
   return {
     monthlyIncome,

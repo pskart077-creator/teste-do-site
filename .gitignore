@@ -48,3 +48,9 @@ public/uploads/news/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.tmp-dev-out.log
+.tmp-dev-err.log
+
+.tmp-dev-out.log
+.tmp-dev-err.log

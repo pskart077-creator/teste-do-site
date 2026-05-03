@@ -1,6 +1,10 @@
 import type { CreditSimulationResult } from "@/lib/credit/types";
 import { money } from "@/lib/credit/helpers";
 import { calculateCreditCapacity } from "@/services/credit/calculateCreditCapacity";
+import {
+  calculateInstallmentWithInterest,
+  getMarketMonthlyInterestRate,
+} from "@/services/credit/calculateInstallmentWithInterest";
 
 export function calculateCreditSimulation(input: {
   requestedAmount: number;
@@ -23,8 +27,22 @@ export function calculateCreditSimulation(input: {
         desiredTerm: Math.max(1, Math.floor(Number(input.desiredTerm) || 1)),
         maxInstallmentAmount: 0,
         maxAffordableAmount: requestedAmount,
-        requestedInstallmentAmount: money(requestedAmount / Math.max(1, Math.floor(Number(input.desiredTerm) || 1))),
-        approvedInstallmentAmount: money(requestedAmount / Math.max(1, Math.floor(Number(input.desiredTerm) || 1))),
+        requestedInstallmentAmount: calculateInstallmentWithInterest({
+          principal: requestedAmount,
+          term: Math.max(1, Math.floor(Number(input.desiredTerm) || 1)),
+          monthlyInterestRatePercent: getMarketMonthlyInterestRate(
+            Math.max(1, Math.floor(Number(input.desiredTerm) || 1)),
+            0.35,
+          ),
+        }),
+        approvedInstallmentAmount: calculateInstallmentWithInterest({
+          principal: requestedAmount,
+          term: Math.max(1, Math.floor(Number(input.desiredTerm) || 1)),
+          monthlyInterestRatePercent: getMarketMonthlyInterestRate(
+            Math.max(1, Math.floor(Number(input.desiredTerm) || 1)),
+            0.35,
+          ),
+        }),
         approvedAmount: requestedAmount,
         incomeCapacityApplied: false,
       };

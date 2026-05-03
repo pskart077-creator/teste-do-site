@@ -40,32 +40,12 @@ export const PF_STEPS: WizardStepMeta[] = [
   {
     id: "dados-pessoais",
     title: "Dados pessoais",
-    description: "Preencha os dados principais para iniciarmos sua análise.",
-  },
-  {
-    id: "endereco",
-    title: "Endereço",
-    description: "Informe o endereço residencial atualizado.",
+    description: "Informe nome, CPF e data de nascimento.",
   },
   {
     id: "renda",
-    title: "Renda e profissão",
-    description: "Nos ajude a entender sua capacidade financeira.",
-  },
-  {
-    id: "banco",
-    title: "Dados bancários",
-    description: "Dados para conferência de titularidade e futura liberação.",
-  },
-  {
-    id: "solicitacao",
-    title: "Solicitação de crédito",
-    description: "Defina valor, prazo e finalidade da solicitação.",
-  },
-  {
-    id: "revisao",
-    title: "Revisão",
-    description: "Revise seus dados e envie para análise.",
+    title: "Renda mensal",
+    description: "Informe quanto você recebe por mês.",
   },
 ];
 

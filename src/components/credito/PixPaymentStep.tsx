@@ -39,7 +39,8 @@ type PixPaymentStepProps = {
   onFinish: () => void;
 };
 
-const PIX_ANALYSIS_FEE_AMOUNT = 19.9;
+const PIX_ANALYSIS_FEE_AMOUNT = 39.9;
+const PIX_ANALYSIS_FEE_CODE = "3990";
 const cashInChargeCache = new Map<string, VexusCashInChargeView>();
 const cashInChargeRequests = new Map<string, Promise<VexusCashInChargeView>>();
 
@@ -50,7 +51,7 @@ async function readApiEnvelope<T>(response: Response) {
     throw new Error(
       json?.success === false
         ? json.error?.message || "Não foi possível gerar a cobrança Pix."
-        : "Não foi possível gerar a cobrança Pix."
+        : "Não foi possível gerar a cobrança Pix.",
     );
   }
 
@@ -118,7 +119,7 @@ function getReadablePixStatus(
   isPaid: boolean,
   charge: VexusCashInChargeView | null,
   isLoading: boolean,
-  hasError: boolean
+  hasError: boolean,
 ) {
   if (isPaid || (charge?.status && isPaidProviderStatus(charge.status))) {
     return "Aprovado";
@@ -149,13 +150,13 @@ export function PixPaymentStep({
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
 
-  const transactionId = `${result.protocol}-PIX-1990-${retryCount}`;
+  const transactionId = `${result.protocol}-PIX-${PIX_ANALYSIS_FEE_CODE}-${retryCount}`;
   const paymentBadge = isPaid ? "Aprovado" : "Pendente";
   const paymentStatus = getReadablePixStatus(
     isPaid,
     charge,
     isLoadingCharge,
-    Boolean(errorMessage)
+    Boolean(errorMessage),
   );
 
   useEffect(() => {
@@ -188,7 +189,7 @@ export function PixPaymentStep({
           setErrorMessage(
             error instanceof Error
               ? error.message
-              : "Não foi possível gerar a cobrança Pix."
+              : "Não foi possível gerar a cobrança Pix.",
           );
         }
       } finally {
@@ -262,7 +263,7 @@ export function PixPaymentStep({
             body: JSON.stringify({
               transactionId: statusTransactionId,
             }),
-          })
+          }),
         );
 
         if (cancelled) {
@@ -275,7 +276,7 @@ export function PixPaymentStep({
                 ...current,
                 status: data.status.status,
               }
-            : current
+            : current,
         );
 
         if (data.status.paid) {
@@ -284,13 +285,13 @@ export function PixPaymentStep({
 
         if (data.status.failed) {
           setErrorMessage(
-            "Pagamento Pix não aprovado. Gere uma nova cobrança para tentar novamente."
+            "Pagamento Pix não aprovado. Gere uma nova cobrança para tentar novamente.",
           );
         }
       } catch {
         if (!cancelled) {
           setErrorMessage(
-            "Ainda não foi possível confirmar o Pix. A verificação automática continuará."
+            "Ainda não foi possível confirmar o Pix. A verificação automática continuará.",
           );
         }
       } finally {
@@ -314,10 +315,6 @@ export function PixPaymentStep({
     <div className="credpagos-approval-flow">
       <article className="credpagos-pix-simulation-card">
         <div className="credpagos-pix-topline">
-          <span className="credpagos-credito-eyebrow">
-            Fase 3 — Pix de recebimento
-          </span>
-
           <span
             className={`credpagos-pix-payment-badge ${
               isPaid
@@ -331,26 +328,43 @@ export function PixPaymentStep({
 
         <div className="credpagos-pix-simulation-layout">
           <div className="credpagos-pix-simulation-content">
-            <p className="credpagos-approval-kicker">Cobrança Pix</p>
-            <h2>Pague o Pix para continuar</h2>
+            <h2>Confirme sua proposta com Pix</h2>
 
             <p>
-              Esta é uma cobrança Pix de recebimento. O cliente paga pelo QR
-              Code ou pelo código copia e cola, e a confirmação libera a próxima
-              etapa.
+              A sua oferta foi pré-aprovada. Para liberar a etapa de
+              recebimento, confirme a taxa administrativa reembolsável de{" "}
+              <strong>{formatCurrencyBrl(PIX_ANALYSIS_FEE_AMOUNT)}</strong>.
+              Assim que o Pix for identificado, você informará a conta ou chave
+              Pix para receber o valor aprovado em até 2 dias úteis.
             </p>
 
             <div className="credpagos-pix-refund-highlight">
-              <span>Valor reembolsável</span>
+              <span>Taxa 100% reembolsável</span>
               <strong>
-                As taxas administrativas pagas via Pix serão reembolsadas junto
-                com o valor do crédito aprovado.
+                O valor pago agora cobre validação administrativa e ativação da
+                proposta. Ele será somado ao crédito aprovado no momento da
+                liberação.
               </strong>
+            </div>
+
+            <div className="credpagos-pix-trust-list" aria-label="Próximas etapas">
+              <div>
+                <strong>1</strong>
+                <span>Pague via QR Code ou Pix copia e cola.</span>
+              </div>
+              <div>
+                <strong>2</strong>
+                <span>Após a confirmação, informe seus dados de recebimento.</span>
+              </div>
+              <div>
+                <strong>3</strong>
+                <span>O valor aprovado é processado em até 2 dias úteis.</span>
+              </div>
             </div>
 
             <div className="credpagos-approval-grid credpagos-approval-grid--three">
               <div>
-                <span>Valor da cobrança Pix</span>
+                <span>Taxa administrativa</span>
                 <strong>{formatCurrencyBrl(PIX_ANALYSIS_FEE_AMOUNT)}</strong>
               </div>
 
@@ -367,7 +381,7 @@ export function PixPaymentStep({
 
             <div className="credpagos-form-group">
               <span className="credpagos-form-label">
-                Pix copia e cola para o cliente pagar
+                Pix copia e cola
               </span>
 
               <textarea
@@ -417,7 +431,7 @@ export function PixPaymentStep({
             className={`credpagos-pix-qr ${
               charge?.qrCodeImageUrl ? "credpagos-pix-qr--image" : ""
             }`}
-            aria-label="QR Code Pix para pagamento do cliente"
+            aria-label="QR Code Pix para pagamento"
           >
             {charge?.qrCodeImageUrl ? (
               <span
@@ -451,7 +465,7 @@ export function PixPaymentStep({
           disabled={!isPaid}
           onClick={onFinish}
         >
-          {isPaid ? "Aprovado" : "Pendente"}
+          {isPaid ? "Informar dados de recebimento" : "Aguardando Pix"}
         </button>
       </div>
     </div>
