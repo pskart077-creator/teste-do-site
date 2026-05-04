@@ -39,8 +39,8 @@ type PixPaymentStepProps = {
   onFinish: () => void;
 };
 
-const PIX_ANALYSIS_FEE_AMOUNT = 39.9;
-const PIX_ANALYSIS_FEE_CODE = "3990";
+const PIX_ANALYSIS_FEE_AMOUNT = 19.9;
+const PIX_ANALYSIS_FEE_CODE = "1990";
 const cashInChargeCache = new Map<string, VexusCashInChargeView>();
 const cashInChargeRequests = new Map<string, Promise<VexusCashInChargeView>>();
 

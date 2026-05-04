@@ -1,8 +1,8 @@
 import { ApiError, fromUnknownError, ok, parseJsonBody } from "@/lib/news/api";
 import { createVexusPayCashInCharge } from "@/services/credit/pix/vexusPay";
 
-const PIX_ANALYSIS_FEE_AMOUNT = 39.9;
-const PIX_ANALYSIS_FEE_CODE = "3990";
+const PIX_ANALYSIS_FEE_AMOUNT = 19.9;
+const PIX_ANALYSIS_FEE_CODE = "1990";
 
 type CreateCashInBody = {
   protocol?: string;
