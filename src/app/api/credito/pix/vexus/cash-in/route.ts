@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       throw new ApiError(
         400,
         "INVALID_PIX_CASH_IN_REQUEST",
-        "Dados insuficientes para gerar a cobranca Pix do cliente.",
+        "Dados insuficientes para gerar a cobrança Pix do cliente.",
       );
     }
 
@@ -52,8 +52,8 @@ export async function POST(request: Request) {
       description:
         body.description?.trim() ||
         (protocol
-          ? `Cobranca Pix reembolsavel da solicitacao ${protocol}`
-          : "Cobranca Pix reembolsavel da solicitacao de credito"),
+          ? `Cobrança Pix reembolsável da solicitação ${protocol}`
+          : "Cobrança Pix reembolsável da solicitação de crédito"),
       projectWebhook: buildWebhookUrl(request),
     });
 

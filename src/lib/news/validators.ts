@@ -165,7 +165,7 @@ const htmlNewsContentDocumentSchema = z
     if (!hasMeaningfulHtmlContent(sanitizeNewsHtml(value.html))) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Conteudo HTML vazio ou invalido.",
+        message: "Conteúdo HTML vazio ou inválido.",
         path: ["html"],
       });
     }

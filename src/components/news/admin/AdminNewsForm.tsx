@@ -352,7 +352,7 @@ export default function AdminNewsForm({ mode, post, categories, tags }: AdminNew
 
       const normalizedHtml = sanitizeNewsHtml(contentHtml);
       if (!hasMeaningfulHtmlContent(normalizedHtml)) {
-        setError("Preencha o conteudo da noticia com HTML valido.");
+        setError("Preencha o conteúdo da notícia com HTML válido.");
         return;
       }
 

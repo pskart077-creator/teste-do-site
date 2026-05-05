@@ -3,12 +3,12 @@ import PageHero from "@/components/page-hero/PageHero";
 export default function ProductHero() {
   return (
     <PageHero
-      title="Analise de credito avancada"
-      description="Conheca a solucao da Credpagos para analisar perfil, entender possibilidades e apoiar decisoes de credito com mais seguranca."
+      title="Análise de crédito avançada"
+      description="Conheça a solução da Credpagos para analisar perfil, entender possibilidades e apoiar decisões de crédito com mais segurança."
       breadcrumbs={[
         { label: "Inicio", href: "/" },
         { label: "Produtos", href: "/produtos" },
-        { label: "Analise de credito avancada" },
+        { label: "Análise de crédito avançada" },
       ]}
     />
   );

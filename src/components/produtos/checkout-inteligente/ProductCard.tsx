@@ -10,9 +10,9 @@ import ServiceCard from "@/components/service-card-s-link/ServiceCard";
 
 const productsData = [
   {
-    title: "Reforco de caixa empresarial",
+    title: "Reforço de caixa empresarial",
     description:
-      "Credito para manter compromissos operacionais e preservar a saude financeira da empresa.",
+      "Crédito para manter compromissos operacionais e preservar a saúde financeira da empresa.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: ShoppingCart,
@@ -20,39 +20,39 @@ const productsData = [
   {
     title: "Capital para oportunidades",
     description:
-      "Apoio para expansao, investimentos e melhorias estrategicas no negocio.",
+      "Apoio para expansão, investimentos e melhorias estratégicas no negócio.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: MousePointerClick,
   },
   {
-    title: "Condicoes conforme perfil",
+    title: "Condições conforme perfil",
     description:
-      "Propostas com valores, prazos e taxas definidos de acordo com analise de credito.",
+      "Propostas com valores, prazos e taxas definidos de acordo com análise de crédito.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: ArrowLeftRight,
   },
   {
-    title: "Atendimento proximo",
+    title: "Atendimento próximo",
     description:
-      "Orientacao comercial para apoiar cada etapa da solicitacao e contratacao.",
+      "Orientação comercial para apoiar cada etapa da solicitação e contratação.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Smile,
   },
   {
-    title: "Analise agil e responsavel",
+    title: "Análise ágil e responsável",
     description:
-      "Processo simples para identificar possibilidades de credito com menos burocracia.",
+      "Processo simples para identificar possibilidades de crédito com menos burocracia.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Zap,
   },
   {
-    title: "Decisao com seguranca",
+    title: "Decisão com segurança",
     description:
-      "Clareza sobre condicoes para escolher a solucao mais adequada ao momento da empresa.",
+      "Clareza sobre condições para escolher a solução mais adequada ao momento da empresa.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: BadgeDollarSign,

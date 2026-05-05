@@ -10,49 +10,49 @@ import ServiceCard from "@/components/service-card-s-link/ServiceCard";
 
 const productsData = [
   {
-    title: "Protecao de dados sensiveis",
+    title: "Proteção de dados sensíveis",
     description:
-      "Camadas adicionais de seguranca para preservar informacoes importantes do cliente.",
+      "Camadas adicionais de segurança para preservar informações importantes do cliente.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: LockKeyhole,
   },
   {
-    title: "Mais confianca no processo",
+    title: "Mais confiança no processo",
     description:
-      "Jornada de solicitacao de credito com foco em protecao e privacidade.",
+      "Jornada de solicitação de crédito com foco em proteção e privacidade.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Shield,
   },
   {
-    title: "Menor exposicao de dados",
+    title: "Menor exposição de dados",
     description:
-      "Boas praticas para reduzir risco no tratamento de informacoes financeiras.",
+      "Boas práticas para reduzir risco no tratamento de informações financeiras.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Database,
   },
   {
-    title: "Seguranca para o cliente",
+    title: "Segurança para o cliente",
     description:
-      "Experiencia mais segura em todas as etapas de contato e avaliacao.",
+      "Experiência mais segura em todas as etapas de contato e avaliação.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Fingerprint,
   },
   {
-    title: "Monitoramento continuo",
+    title: "Monitoramento contínuo",
     description:
-      "Padrao elevado de protecao para reforcar seguranca e confiabilidade.",
+      "Padrão elevado de proteção para reforçar segurança e confiabilidade.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: ScanLine,
   },
   {
-    title: "Controle e governanca",
+    title: "Controle e governança",
     description:
-      "Mais visibilidade sobre regras e protocolos de seguranca da operacao.",
+      "Mais visibilidade sobre regras e protocolos de segurança da operação.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: FileLock2,

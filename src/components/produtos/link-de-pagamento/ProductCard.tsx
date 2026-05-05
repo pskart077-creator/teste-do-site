@@ -12,7 +12,7 @@ const productsData = [
   {
     title: "Organizacao de contas",
     description:
-      "Emprestimo pessoal para reequilibrar despesas e reduzir pressao no mes a mes.",
+      "Empréstimo pessoal para reequilibrar despesas e reduzir pressão no mês a mês.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Link2,
@@ -28,7 +28,7 @@ const productsData = [
   {
     title: "Planejamento de objetivos",
     description:
-      "Use o credito para realizar planos com condicoes avaliadas conforme perfil.",
+      "Use o crédito para realizar planos com condições avaliadas conforme perfil.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Smartphone,
@@ -36,23 +36,23 @@ const productsData = [
   {
     title: "Processo simplificado",
     description:
-      "Solicitacao com menos burocracia e orientacao clara sobre cada etapa.",
+      "Solicitação com menos burocracia e orientação clara sobre cada etapa.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Wallet,
   },
   {
-    title: "Analise agil",
+    title: "Análise ágil",
     description:
-      "Avaliacao responsavel para apresentar possibilidades de forma objetiva.",
+      "Avaliação responsável para apresentar possibilidades de forma objetiva.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Clock3,
   },
   {
-    title: "Transparencia nas condicoes",
+    title: "Transparência nas condições",
     description:
-      "Valores, prazos e taxas informados com clareza para decisao mais segura.",
+      "Valores, prazos e taxas informados com clareza para decisão mais segura.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: CircleDollarSign,

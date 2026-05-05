@@ -80,7 +80,7 @@ export default function NewsEditor({ value, onChange }: NewsEditorProps) {
 
       <div className="credpago-news-editor__canvas">
         <label className="credpago-news-editor__label" htmlFor="news-html-editor">
-          HTML da noticia
+          HTML da notícia
         </label>
         <textarea
           id="news-html-editor"
@@ -98,7 +98,7 @@ export default function NewsEditor({ value, onChange }: NewsEditorProps) {
         <div
           className="credpago-news-editor__preview credpago-news-rich"
           dangerouslySetInnerHTML={{
-            __html: previewHtml || "<p>Nenhum conteudo para preview.</p>",
+            __html: previewHtml || "<p>Nenhum conteúdo para preview.</p>",
           }}
         />
       </div>

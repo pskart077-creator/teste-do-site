@@ -4,10 +4,10 @@ import SiteFooter from "@/components/layout/footer/SiteFooter";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Solicitar Cartao CredPagos",
-  description: "Solicite seu cartao CredPagos em poucos passos.",
+  title: "Solicitar Cartão CredPagos",
+  description: "Solicite seu cartão CredPagos em poucos passos.",
   path: "/simular-credito",
-  keywords: ["credpagos", "cartao de credito", "solicitar cartao"],
+  keywords: ["credpagos", "cartão de crédito", "solicitar cartão"],
 });
 
 export default function SimularCreditoPage() {

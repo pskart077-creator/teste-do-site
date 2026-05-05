@@ -24,8 +24,8 @@ export async function generateMetadata(
       segmentTitle: "Para Você",
       segmentKeywords: [
         "para você",
-        "pessoa fisica",
-        "soluções para pessoa fisica",
+        "pessoa física",
+        "soluções para pessoa física",
       ],
     },
   );

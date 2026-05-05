@@ -12,17 +12,17 @@ export async function generateMetadata(
 
   if (!service) {
     return {
-      title: "Servico nao encontrado",
-      description: "O conteudo solicitado nao foi encontrado.",
+      title: "Serviço não encontrado",
+      description: "O conteúdo solicitado não foi encontrado.",
     };
   }
 
   return buildSegmentServiceMetadata(service, `/solucoes/para-e-commerce/${service.slug}`, {
-    segmentTitle: "Credito para PJ",
+    segmentTitle: "Crédito para PJ",
     segmentKeywords: [
-      "credito para pj",
+      "crédito para pj",
       "capital de giro",
-      "emprestimo para empresas",
+      "empréstimo para empresas",
     ],
   });
 }

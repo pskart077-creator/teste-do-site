@@ -56,7 +56,7 @@ export function CardSimulatorIntro({
           <h1 id="credpagos-card-simulator-title">Cred Gold</h1>
 
 
-          <div className="credpagos-card-benefits" aria-label="Beneficios do cartao">
+          <div className="credpagos-card-benefits" aria-label="Benefícios do cartão">
             <div className="credpagos-card-benefit-row">
               <div className="credpagos-card-benefit-label">
                 <Grid3X3 aria-hidden="true" size={22} strokeWidth={2.4} />
@@ -86,7 +86,7 @@ export function CardSimulatorIntro({
           <div className="credpagos-card-image-slot">
             <Image
               src="/assets/img/cartao/cart%C3%A3o.png"
-              alt="Cartao CredPagos Azul Gold"
+              alt="Cartão CredPagos Azul Gold"
               width={3750}
               height={2500}
               className="credpagos-card-image"

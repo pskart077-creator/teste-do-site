@@ -9,41 +9,41 @@ import { cn } from "@/lib/utils";
 const showcaseTabs = [
   {
     id: "credito",
-    label: "Credito",
-    title: "Credito para MEI, PJ e PF",
+    label: "Crédito",
+    title: "Crédito para MEI, PJ e PF",
     description:
-      "A Credpagos facilita o acesso ao emprestimo com analise simples e atendimento proximo para cada perfil.",
+      "A Credpagos facilita o acesso ao empréstimo com análise simples e atendimento próximo para cada perfil.",
     image: "/assets/img/home/img-03.jpg",
     points: [
-      "Solucoes para pessoa fisica, microempreendedores e empresas",
-      "Condicoes conforme avaliacao de perfil",
-      "Processo com menos burocracia e mais transparencia",
+      "Soluções para pessoa física, microempreendedores e empresas",
+      "Condições conforme avaliação de perfil",
+      "Processo com menos burocracia e mais transparência",
     ],
   },
   {
     id: "analise",
-    label: "Analise",
-    title: "Analise responsavel",
+    label: "Análise",
+    title: "Análise responsável",
     description:
-      "Avaliamos cada solicitacao com clareza para apresentar valor, prazo e taxa de forma objetiva.",
+      "Avaliamos cada solicitação com clareza para apresentar valor, prazo e taxa de forma objetiva.",
     image: "/assets/img/home/img-05.png",
     points: [
-      "Aprovacao mediante avaliacao",
-      "Condicoes alinhadas ao momento financeiro",
-      "Suporte para decisao com seguranca",
+      "Aprovação mediante avaliação",
+      "Condições alinhadas ao momento financeiro",
+      "Suporte para decisão com segurança",
     ],
   },
   {
     id: "consultoria",
     label: "Consultoria",
-    title: "Atendimento com orientacao",
+    title: "Atendimento com orientação",
     description:
-      "Nosso time acompanha cada etapa para ajudar na escolha da melhor solucao de credito.",
+      "Nosso time acompanha cada etapa para ajudar na escolha da melhor solução de crédito.",
     image:
       "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80",
     points: [
       "Atendimento humanizado",
-      "Mais clareza sobre condicoes e documentacao",
+      "Mais clareza sobre condições e documentação",
       "Jornada segura do inicio ao fim",
     ],
   },
@@ -53,7 +53,7 @@ const showcaseStats = [
   { value: "09", label: "solucoes no portfolio" },
   { value: "MEI/PJ/PF", label: "perfis atendidos" },
   { value: "24/7", label: "canais de atendimento" },
-  { value: "+", label: "seguranca e transparencia" },
+  { value: "+", label: "segurança e transparência" },
 ];
 
 export default function ProductsShowcase() {
@@ -115,7 +115,7 @@ export default function ProductsShowcase() {
             </div>
 
             <Link href="/simular-credito" className="financial-showcase-button">
-              Simular Credito
+              Simular Crédito
             </Link>
           </div>
         </div>

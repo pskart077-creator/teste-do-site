@@ -10,9 +10,9 @@ import ServiceCard from "@/components/service-card-s-link/ServiceCard";
 
 const productsData = [
   {
-    title: "Investimento no negocio",
+    title: "Investimento no negócio",
     description:
-      "Credito para MEI investir em estrutura, estoque e melhoria da operacao.",
+      "Crédito para MEI investir em estrutura, estoque e melhoria da operação.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: ShieldCheck,
@@ -36,15 +36,15 @@ const productsData = [
   {
     title: "Planejamento com previsibilidade",
     description:
-      "Condicoes transparentes para organizar o uso do credito com mais seguranca.",
+      "Condições transparentes para organizar o uso do crédito com mais segurança.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: BarChart3,
   },
   {
-    title: "Analise responsavel",
+    title: "Análise responsável",
     description:
-      "Avaliacao de perfil para indicar alternativas adequadas ao momento financeiro.",
+      "Avaliação de perfil para indicar alternativas adequadas ao momento financeiro.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: RefreshCw,
@@ -52,7 +52,7 @@ const productsData = [
   {
     title: "Menos burocracia",
     description:
-      "Processo simples com atendimento proximo para facilitar cada etapa da jornada.",
+      "Processo simples com atendimento próximo para facilitar cada etapa da jornada.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Layers3,

@@ -13,25 +13,25 @@ import ServiceCard from "@/components/service-card/ServiceCard";
 
 const productsData = [
   {
-    title: "Credito para MEI",
+    title: "Crédito para MEI",
     description:
-      "Emprestimo para microempreendedores investirem no negocio e organizarem o caixa.",
+      "Empréstimo para microempreendedores investirem no negócio e organizarem o caixa.",
     href: "/produtos/infraestrutura-de-pagamentos",
     linkLabel: "Saiba mais",
     icon: CreditCard,
   },
   {
-    title: "Credito para PJ",
+    title: "Crédito para PJ",
     description:
-      "Capital para reforcar fluxo de caixa, manter operacao e aproveitar oportunidades.",
+      "Capital para reforçar fluxo de caixa, manter operação e aproveitar oportunidades.",
     href: "/produtos/checkout-inteligente",
     linkLabel: "Saiba mais",
     icon: ShoppingBag,
   },
   {
-    title: "Credito para PF",
+    title: "Crédito para PF",
     description:
-      "Emprestimo pessoal para organizar contas, resolver imprevistos e realizar planos.",
+      "Empréstimo pessoal para organizar contas, resolver imprevistos e realizar planos.",
     href: "/produtos/link-de-pagamento",
     linkLabel: "Saiba mais",
     icon: Link2,
@@ -39,23 +39,23 @@ const productsData = [
   {
     title: "Capital de giro",
     description:
-      "Solucao para empresas manterem o negocio em movimento com mais previsibilidade.",
+      "Solução para empresas manterem o negócio em movimento com mais previsibilidade.",
     href: "/produtos/pagamentos-recorrentes",
     linkLabel: "Saiba mais",
     icon: RefreshCcw,
   },
   {
-    title: "Emprestimo pessoal",
+    title: "Empréstimo pessoal",
     description:
-      "Alternativa para quem precisa de apoio financeiro com analise simples e transparente.",
+      "Alternativa para quem precisa de apoio financeiro com análise simples e transparente.",
     href: "/produtos/split-de-pagamentos",
     linkLabel: "Saiba mais",
     icon: Split,
   },
   {
-    title: "Analise de credito",
+    title: "Análise de crédito",
     description:
-      "Processo responsavel para avaliar perfil e apresentar condicoes adequadas.",
+      "Processo responsável para avaliar perfil e apresentar condições adequadas.",
     href: "/simular-credito",
     linkLabel: "Saiba mais",
     icon: ShieldCheck,
@@ -63,23 +63,23 @@ const productsData = [
   {
     title: "Processo seguro",
     description:
-      "Protecao de dados e boas praticas para uma jornada de solicitacao confiavel.",
+      "Proteção de dados e boas práticas para uma jornada de solicitação confiável.",
     href: "/produtos/tokenizacao-e-protecao-de-dados",
     linkLabel: "Saiba mais",
     icon: LockKeyhole,
   },
   {
-    title: "Condicoes transparentes",
+    title: "Condições transparentes",
     description:
-      "Clareza sobre valores, prazos e taxas para apoiar decisoes com seguranca.",
+      "Clareza sobre valores, prazos e taxas para apoiar decisões com segurança.",
     href: "/produtos/performance-e-analytics",
     linkLabel: "Saiba mais",
     icon: BarChart3,
   },
   {
-    title: "Consultoria de credito",
+    title: "Consultoria de crédito",
     description:
-      "Atendimento proximo para orientar a melhor solucao para MEI, PJ e PF.",
+      "Atendimento próximo para orientar a melhor solução para MEI, PJ e PF.",
     href: "/produtos/conexoes-e-integracoes",
     linkLabel: "Saiba mais",
     icon: Plug,
@@ -93,11 +93,11 @@ export default function Products() {
         <div className="solutions-grid-intro">
           <span className="solutions-grid-eyebrow">Produtos</span>
           <h2 className="solutions-grid-title">
-            Solucoes de credito para cada momento financeiro
+            Soluções de crédito para cada momento financeiro
           </h2>
           <p className="solutions-grid-description">
-            A Credpagos apoia MEI, PJ e PF com emprestimos, capital de giro,
-            analise de credito e consultoria para uma jornada mais simples e
+            A Credpagos apoia MEI, PJ e PF com empréstimos, capital de giro,
+            análise de crédito e consultoria para uma jornada mais simples e
             transparente.
           </p>
         </div>

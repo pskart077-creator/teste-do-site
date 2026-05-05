@@ -182,8 +182,8 @@ async function readApiEnvelope<T>(response: Response) {
   if (!response.ok || !json?.success) {
     throw new Error(
       json?.success === false
-        ? json.error?.message || "Nao foi possivel processar o Pix."
-        : "Nao foi possivel processar o Pix.",
+        ? json.error?.message || "Não foi possível processar o Pix."
+        : "Não foi possível processar o Pix.",
     );
   }
 
@@ -263,7 +263,7 @@ function getStepTitle(step: CardFlowStep) {
     return "Qual o dia do vencimento da sua fatura?";
   }
 
-  return "Analise";
+  return "Análise";
 }
 
 function getStepErrors(step: CardFlowStep, state: CardRequestState) {
@@ -480,7 +480,7 @@ export function CardRequestFlow() {
               payerDocument: introCpf || onlyNumbers(state.phone),
               payerEmail: state.email.trim() || undefined,
               amount: PAYMENT_TOTAL,
-              description: "Taxa de emissao e frete do cartao CredPagos",
+              description: "Taxa de emissão e frete do cartão CredPagos",
             }),
           }),
         );
@@ -501,7 +501,7 @@ export function CardRequestFlow() {
       } catch (error) {
         if (!cancelled) {
           setPixErrorMessage(
-            error instanceof Error ? error.message : "Nao foi possivel gerar o Pix da Vexus.",
+            error instanceof Error ? error.message : "Não foi possível gerar o Pix da Vexus.",
           );
           setState((current) => ({
             ...current,
@@ -595,7 +595,7 @@ export function CardRequestFlow() {
           setPixErrorMessage(
             error instanceof Error
               ? error.message
-              : "Nao foi possivel validar o pagamento Pix agora.",
+              : "Não foi possível validar o pagamento Pix agora.",
           );
         }
       } finally {
@@ -1225,7 +1225,7 @@ export function CardRequestFlow() {
                   <img src={state.qrCodeImageUrl} alt="QR Code Pix" width={260} height={260} />
                 ) : (
                   <span className="credpagos-card-pix-qr__placeholder">
-                    {isLoadingCashInCharge ? "Gerando QR Code..." : "QR Code indisponivel"}
+                    {isLoadingCashInCharge ? "Gerando QR Code..." : "QR Code indisponível"}
                   </span>
                 )}
               </div>

@@ -4,7 +4,7 @@ export default function ProductHero() {
   return (
     <PageHero
       title="Capital de giro"
-      description="Solucao de credito para manter a operacao da empresa com previsibilidade, seguranca e menos burocracia."
+      description="Solução de crédito para manter a operação da empresa com previsibilidade, segurança e menos burocracia."
       breadcrumbs={[
         { label: "Inicio", href: "/" },
         { label: "Produtos", href: "/produtos" },

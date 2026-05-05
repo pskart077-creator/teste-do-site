@@ -4,11 +4,11 @@ export default function ProductSplitTokenization() {
   return (
     <FeatureSplitSection
       title="Processo seguro para proteger dados em toda a jornada"
-      description="A Credpagos reforca a protecao de dados com praticas de seguranca para tornar a solicitacao de credito mais confiavel e transparente."
-      buttonLabel="Simular Credito"
+      description="A Credpagos reforça a proteção de dados com práticas de segurança para tornar a solicitação de crédito mais confiável e transparente."
+      buttonLabel="Simular Crédito"
       buttonHref="/simular-credito"
       imageSrc="/assets/img/produtos/tokenizacao-e-protecao-de-dados.jpg"
-      imageAlt="Protecao de dados na Credpagos"
+      imageAlt="Proteção de dados na Credpagos"
     />
   );
 }

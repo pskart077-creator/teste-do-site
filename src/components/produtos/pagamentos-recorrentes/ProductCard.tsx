@@ -28,7 +28,7 @@ const productsData = [
   {
     title: "Apoio para fornecedores",
     description:
-      "Recurso para negociar melhor com fornecedores e manter o negocio em movimento.",
+      "Recurso para negociar melhor com fornecedores e manter o negócio em movimento.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: CircleDollarSign,
@@ -36,23 +36,23 @@ const productsData = [
   {
     title: "Agilidade no dia a dia",
     description:
-      "Processo simplificado para acessar credito sem travar a operacao.",
+      "Processo simplificado para acessar crédito sem travar a operação.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Clock3,
   },
   {
-    title: "Analise responsavel",
+    title: "Análise responsável",
     description:
-      "Avaliacao de perfil para apresentar condicoes adequadas ao momento da empresa.",
+      "Avaliação de perfil para apresentar condições adequadas ao momento da empresa.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: ShieldCheck,
   },
   {
-    title: "Condicoes com clareza",
+    title: "Condições com clareza",
     description:
-      "Transparencia em valor, prazo e taxa para apoiar uma decisao segura.",
+      "Transparência em valor, prazo e taxa para apoiar uma decisão segura.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: BarChart3,

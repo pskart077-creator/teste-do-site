@@ -10,9 +10,9 @@ import ServiceCard from "@/components/service-card-s-link/ServiceCard";
 
 const productsData = [
   {
-    title: "Reforco para capital de trabalho",
+    title: "Reforço para capital de trabalho",
     description:
-      "Credito para empresas manterem operacao, fornecedores e equipe em equilibrio.",
+      "Crédito para empresas manterem operação, fornecedores e equipe em equilíbrio.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Split,
@@ -26,7 +26,7 @@ const productsData = [
     icon: GitBranch,
   },
   {
-    title: "Condicoes conforme avaliacao",
+    title: "Condições conforme avaliação",
     description:
       "Propostas apresentadas com clareza, alinhadas ao perfil e ao momento da empresa.",
     href: "#",
@@ -36,23 +36,23 @@ const productsData = [
   {
     title: "Processo com menos burocracia",
     description:
-      "Jornada simples para solicitar credito com acompanhamento proximo do time.",
+      "Jornada simples para solicitar crédito com acompanhamento próximo do time.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Shuffle,
   },
   {
-    title: "Analise responsavel",
+    title: "Análise responsável",
     description:
-      "Avaliacao objetiva para identificar alternativas de emprestimo adequadas.",
+      "Avaliação objetiva para identificar alternativas de empréstimo adequadas.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: Scale,
   },
   {
-    title: "Transparencia total",
+    title: "Transparência total",
     description:
-      "Valor, prazo e taxa explicados com clareza para decisao segura da empresa.",
+      "Valor, prazo e taxa explicados com clareza para decisão segura da empresa.",
     href: "#",
     linkLabel: "Saiba mais",
     icon: BadgePercent,
