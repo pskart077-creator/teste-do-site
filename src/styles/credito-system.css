@@ -2756,14 +2756,12 @@ body:has(.credpagos-card-page) .site-footer {
 }
 
 .credpagos-card-request-offer__image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 300px;
-  max-width: none;
-  height: 210px;
-  object-fit: cover;
-  transform: translate(-50%, -50%) rotate(-90deg);
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
 }
 
 .credpagos-card-request-offer__benefits {
@@ -2828,8 +2826,8 @@ body:has(.credpagos-card-page) .site-footer {
   }
 
   .credpagos-card-request-offer__image {
-    width: 270px;
-    height: 180px;
+    width: 100%;
+    height: 100%;
   }
 }
 
@@ -2854,8 +2852,8 @@ body:has(.credpagos-card-page) .site-footer {
   }
 
   .credpagos-card-request-offer__image {
-    width: 250px;
-    height: 170px;
+    width: 100%;
+    height: 100%;
   }
 
   .credpagos-card-request-offer__benefits {
@@ -3649,8 +3647,8 @@ body:has(.credpagos-card-page) .site-footer {
   }
 
   .credpagos-card-request-offer__image {
-    width: 246px;
-    height: 152px;
+    width: 100%;
+    height: 100%;
   }
 
   .credpagos-card-request-progress__line strong {
@@ -3737,8 +3735,8 @@ body:has(.credpagos-card-page) .site-footer {
   }
 
   .credpagos-card-request-offer__image {
-    width: 166px;
-    height: 102px;
+    width: 100%;
+    height: 100%;
   }
 
   .credpagos-card-request-offer__row {

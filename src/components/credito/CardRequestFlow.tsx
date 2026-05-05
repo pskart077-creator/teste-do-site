@@ -384,8 +384,8 @@ function CardLeftPanel() {
           <Image
             src="/assets/img/cartao/cartao-01.png"
             alt="Cartão CredPagos"
-            width={2271}
-            height={1408}
+            width={1408}
+            height={2271}
             className="credpagos-card-request-offer__image"
           />
         </div>
