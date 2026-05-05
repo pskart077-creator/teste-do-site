@@ -3,7 +3,7 @@
 import { createElement, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Script from "next/script";
-import { BadgeDollarSign, Check, ChevronRight, Copy, Grid3X3, Info } from "lucide-react";
+import { BadgeDollarSign, CalendarCheck, Check, ChevronRight, Copy, Grid3X3, Info, Mail, Truck } from "lucide-react";
 import { CardFlowHeader } from "@/components/credito/CardFlowHeader";
 import { CardSimulatorIntro } from "@/components/credito/CardSimulatorIntro";
 import { SearchableProfessionSelect } from "@/components/credito/SearchableProfessionSelect";
@@ -15,7 +15,7 @@ import { fetchAddressByZipCode } from "@/services/credit/fetchAddressByZipCode";
 type PaymentStatus = "pending" | "paid" | "expired" | "error";
 type ZipCodeStatus = "idle" | "loading" | "success" | "error";
 type CardFlowStep = 1 | 2 | 3 | 4 | 5;
-type CardFlowStage = "intro" | CardFlowStep | "approved" | "payment";
+type CardFlowStage = "intro" | CardFlowStep | "approved" | "payment" | "delivery";
 
 type VexusCashInChargeView = {
   amount: number;
@@ -419,7 +419,6 @@ export function CardRequestFlow() {
   const [approvedCardSourceIndex, setApprovedCardSourceIndex] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [copyLabel, setCopyLabel] = useState("Copiar");
-  const [completedMessage, setCompletedMessage] = useState("");
   const [cashInCharge, setCashInCharge] = useState<VexusCashInChargeView | null>(null);
   const [isLoadingCashInCharge, setIsLoadingCashInCharge] = useState(false);
   const [pixErrorMessage, setPixErrorMessage] = useState<string | null>(null);
@@ -456,7 +455,6 @@ export function CardRequestFlow() {
     async function createCashInCharge() {
       setIsLoadingCashInCharge(true);
       setPixErrorMessage(null);
-      setCompletedMessage("");
       setCopyLabel("Copiar");
       setCashInCharge(null);
       setState((current) => ({
@@ -1143,6 +1141,7 @@ export function CardRequestFlow() {
   const approvedLimitFormatted = useMemo(() => formatCurrencyBrl(state.approvedLimit), [state.approvedLimit]);
   const approvedCardHolderName = useMemo(() => formatCardHolderName(state.fullName), [state.fullName]);
   const approvedCardSource = APPROVED_CARD_SOURCES[Math.min(approvedCardSourceIndex, APPROVED_CARD_SOURCES.length - 1)];
+  const deliveryEmail = state.email.trim();
 
   if (stage === "intro") {
     return <CardSimulatorIntro cpf={introCpf} onCpfChange={setIntroCpf} onSubmit={() => setStage(1)} />;
@@ -1289,16 +1288,60 @@ export function CardRequestFlow() {
                     state.paymentStatus === "paid" ? "credpagos-card-request-button--active" : ""
                   }`}
                   disabled={state.paymentStatus !== "paid"}
-                  onClick={() => setCompletedMessage("Solicitação enviada. A emissão do cartão está em andamento.")}
+                  onClick={() => setStage("delivery")}
                 >
                   Continuar
                   <ChevronRight aria-hidden="true" size={21} />
                 </button>
-
-                {completedMessage ? <small className="credpagos-card-pix-copy__done">{completedMessage}</small> : null}
               </div>
             </article>
           </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (stage === "delivery") {
+    return (
+      <div className="credpagos-card-request-shell">
+        <CardFlowHeader />
+
+        <section className="credpagos-card-delivery">
+          <span className="credpagos-card-delivery__icon" aria-hidden="true">
+            <Truck size={30} />
+          </span>
+
+          <span className="credpagos-card-delivery__eyebrow">Pagamento confirmado</span>
+          <h2>Seu cartão está a caminho</h2>
+          <p>
+            A emissão foi iniciada com sucesso. O cartão CredPagos chegará no endereço informado em até{" "}
+            <strong>7 dias úteis</strong>.
+          </p>
+
+          <div className="credpagos-card-delivery__panel">
+            <div className="credpagos-card-delivery__item">
+              <CalendarCheck aria-hidden="true" size={24} />
+              <div>
+                <strong>Entrega estimada</strong>
+                <span>Até 7 dias úteis após a confirmação do pagamento.</span>
+              </div>
+            </div>
+
+            <div className="credpagos-card-delivery__item">
+              <Mail aria-hidden="true" size={24} />
+              <div>
+                <strong>Notificações por e-mail</strong>
+                <span>
+                  Você receberá atualizações sobre a emissão e entrega
+                  {deliveryEmail ? ` em ${deliveryEmail}` : " no e-mail cadastrado"}.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <small>
+            Fique de olho na caixa de entrada e no spam para acompanhar cada etapa da entrega.
+          </small>
         </section>
       </div>
     );
