@@ -81,8 +81,8 @@ const INVOICE_OPTIONS = [
 
 const PAYMENT_ITEMS = [
   { label: "Taxa de emissão do cartão", value: 9.9 },
-  { label: "Frete para entrega", value: 5 },
-  { label: "Processamento do pedido", value: 5 },
+  { label: "Frete para entrega", value: 0 },
+  { label: "Processamento do pedido", value: 0 },
 ] as const;
 
 const PAYMENT_TOTAL = PAYMENT_ITEMS.reduce((total, item) => total + item.value, 0);
