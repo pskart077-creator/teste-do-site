@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { createElement, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Script from "next/script";
 import { BadgeDollarSign, Check, ChevronRight, Copy, Grid3X3, Info } from "lucide-react";
@@ -11,21 +11,6 @@ import { CARD_REQUEST_PROFESSIONS } from "@/components/credito/cardRequestProfes
 import { formatCurrencyBrl, maskPhoneBr } from "@/lib/credit/helpers";
 import { calculateCreditCardLimit } from "@/services/credit/calculateCreditCardLimit";
 import { fetchAddressByZipCode } from "@/services/credit/fetchAddressByZipCode";
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "lottie-player": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
-        autoplay?: boolean;
-        background?: string;
-        loop?: boolean;
-        mode?: string;
-        speed?: number | string;
-        src?: string;
-      };
-    }
-  }
-}
 
 type PaymentStatus = "pending" | "paid" | "expired" | "error";
 type ZipCodeStatus = "idle" | "loading" | "success" | "error";
@@ -546,6 +531,8 @@ export function CardRequestFlow() {
       return;
     }
 
+    const cashInTransactionId = cashInCharge.transactionId;
+
     if (state.paymentStatus === "paid" || state.paymentStatus === "expired") {
       return;
     }
@@ -568,7 +555,7 @@ export function CardRequestFlow() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              transactionId: cashInCharge.transactionId,
+              transactionId: cashInTransactionId,
             }),
           }),
         );
@@ -600,7 +587,7 @@ export function CardRequestFlow() {
             ...current,
             paymentStatus: "expired",
           }));
-          setPixErrorMessage("O Pix expirou ou foi recusado. Gere uma nova cobranca para continuar.");
+          setPixErrorMessage("O Pix expirou ou precisa ser gerado novamente para continuar.");
           return;
         }
       } catch (error) {
@@ -1118,15 +1105,15 @@ export function CardRequestFlow() {
         />
         <h2>{getStepTitle(5)}</h2>
         <div className="credpagos-card-request-analysis">
-          <lottie-player
-            aria-hidden="true"
-            autoplay
-            background="transparent"
-            className="credpagos-card-request-analysis__lottie"
-            loop
-            speed="1"
-            src="/assets/img/cartao/loading.json"
-          />
+          {createElement("lottie-player", {
+            "aria-hidden": "true",
+            autoplay: true,
+            background: "transparent",
+            className: "credpagos-card-request-analysis__lottie",
+            loop: true,
+            speed: "1",
+            src: "/assets/img/cartao/loading.json",
+          })}
           <strong>Aguarde</strong>
         </div>
       </>
