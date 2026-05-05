@@ -59,7 +59,7 @@ export function CardApplicationStep({
                   <BadgeDollarSign aria-hidden="true" size={14} strokeWidth={2.2} />
                   <div>
                     <strong>Mensalidade</strong>
-                    <span>Grátis ao gastar R$ 20 mil por fatura</span>
+                    <span>Grátis ao gastar R$ 500 por fatura</span>
                   </div>
                 </div>
               </div>

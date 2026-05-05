@@ -76,7 +76,7 @@ export function CardSimulatorIntro({
               <strong>
                 Grátis ao gastar
                 <br />
-                R$ 2 mil por fatura
+                R$ 500 por fatura
               </strong>
             </div>
           </div>
