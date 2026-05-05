@@ -1,3 +1,7 @@
+/* ========================
+   Credito Base
+======================== */
+
 .credpagos-credito-page {
   width: min(1200px, calc(100% - 2rem));
   margin: 120px auto;
@@ -140,164 +144,974 @@
   gap: 1rem;
 }
 
-.credpagos-loan-simulator {
-  display: grid;
-  gap: 1.35rem;
-  color: #0f1b3d;
-  justify-items: center;
+/* ========================
+   Card Global Overrides
+======================== */
+
+body:has(.credpagos-card-page) .site-header-wrap {
+  display: none;
 }
 
-.credpagos-loan-simulator-header {
-  display: grid;
-  gap: 0.45rem;
-  width: min(854px, 100%);
+html:has(.credpagos-card-simulator),
+body:has(.credpagos-card-page) {
+  background: #f4f5f7;
 }
 
-.credpagos-loan-simulator-header h2 {
-  margin: 0;
-  color: #263653;
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.05;
-}
-
-.credpagos-loan-simulator-header p {
-  margin: 0;
-  color: #0f1b3d;
-  font-size: 1rem;
-}
-
-.credpagos-loan-simulator-card {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  max-width: 854px;
+html:has(.credpagos-card-simulator),
+body:has(.credpagos-card-simulator) {
   overflow: hidden;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
 }
 
-.credpagos-loan-simulator-controls {
-  display: grid;
-  gap: 2rem;
-  padding: 1.1rem 1rem 2rem;
+body:has(.credpagos-card-page) .site-footer {
+  display: none;
 }
 
-.credpagos-loan-slider-block {
-  display: grid;
-  gap: 0.6rem;
-  text-align: center;
-}
-
-.credpagos-loan-slider-block > span {
-  color: #0f1b3d;
-  font-size: 1.05rem;
-}
-
-.credpagos-loan-slider-block > strong {
-  color: #5493ff;
-  font-size: 1.05rem;
-}
-
-.credpagos-loan-slider-block input[type="range"] {
+.credpagos-credito-page.credpagos-card-page {
   width: 100%;
-  height: 5px;
-  border-radius: 999px;
-  outline: none;
-  appearance: none;
-  background:
-    linear-gradient(#5493ff, #5493ff) 0 / var(--credpagos-slider-progress) 100% no-repeat,
-    #dedede;
+  min-height: 100svh;
+  margin: 0;
+  padding: 0;
+  background: #f4f5f7;
+  color: #000000;
 }
 
-.credpagos-loan-slider-block input[type="range"]::-webkit-slider-thumb {
-  width: 18px;
-  height: 18px;
-  border: 0;
-  border-radius: 999px;
-  appearance: none;
+/* ========================
+   Card Header
+======================== */
+
+.credpagos-card-topbar {
+  width: 100%;
+  height: 63px;
   background: #5493ff;
-  cursor: pointer;
 }
 
-.credpagos-loan-slider-block input[type="range"]::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border: 0;
-  border-radius: 999px;
-  background: #5493ff;
-  cursor: pointer;
-}
-
-.credpagos-loan-slider-limits {
+.credpagos-card-topbar__inner {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  color: #0f1b3d;
-  font-size: 0.95rem;
+  width: min(740px, calc(100% - 32px));
+  height: 100%;
+  margin: 0 auto;
 }
 
-.credpagos-loan-simulator-result {
-  display: grid;
-  align-content: center;
-  gap: 1rem;
-  padding: 1.5rem 1rem;
-  background: #eeeeee;
-  text-align: center;
+.credpagos-card-topbar__logo {
+  display: block;
+  width: 125px;
+  height: 31px;
+  background: #ffffff;
+  mask: url("/assets/img/logo/logo.svg") center / contain no-repeat;
+  -webkit-mask: url("/assets/img/logo/logo.svg") center / contain no-repeat;
+  transform: translateX(12px);
 }
 
-.credpagos-loan-simulator-result > span {
-  color: #0f1b3d;
-  font-size: 1.05rem;
-}
-
-.credpagos-loan-simulator-result strong {
-  display: grid;
-  gap: 0.15rem;
-  color: #5493ff;
-  font-size: clamp(2.6rem, 5vw, 3.9rem);
-  line-height: 0.95;
-}
-
-.credpagos-loan-simulator-result small {
-  font-size: 1.35rem;
+.credpagos-card-topbar__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
   line-height: 1;
 }
 
-.credpagos-loan-simulator-result p {
+.credpagos-card-page .credpagos-credito-container,
+.credpagos-card-page .credpagos-wizard-wrapper {
+  width: 100%;
+  min-height: inherit;
+}
+
+.credpagos-card-page .credpagos-wizard-wrapper {
+  align-content: start;
+  gap: 0;
+}
+
+/* ========================
+   Card Intro Simulator
+======================== */
+
+.credpagos-card-simulator {
+  display: grid;
+  grid-template-columns: 230px 252px 196px;
+  align-items: start;
+  justify-content: center;
+  gap: 31px;
+  width: min(740px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 146px 0 0;
+  transform: translateX(12px);
+}
+
+.credpagos-card-simulator__details {
+  display: grid;
+  gap: 25px;
+  align-content: center;
+}
+
+.credpagos-card-simulator__details h1 {
   margin: 0;
-  padding-top: 1rem;
-  border-top: 1px solid #737373;
-  color: #0f1b3d;
-  font-size: 0.78rem;
-  line-height: 1.7;
+  color: #000000;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: 0;
 }
 
-.credpagos-loan-simulator-result em {
-  color: #52617a;
-  font-size: 0.78rem;
-  font-style: normal;
-  font-weight: 800;
+.credpagos-card-brand-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
 }
 
-.credpagos-loan-simulator-note {
-  width: min(854px, 100%);
-  margin: -0.9rem 0 1rem;
-  color: #0f1b3d;
-  font-size: 0.85rem;
+.credpagos-card-brand-row>span {
+  color: #20242b;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.credpagos-card-brand-options {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.credpagos-card-brand-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 20px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: #ffffff;
+  color: #000000;
+  cursor: pointer;
+}
+
+.credpagos-card-brand-button.is-selected {
+  border-color: #ff5b21;
+}
+
+.credpagos-card-brand-mastercard {
+  position: relative;
+  display: block;
+  width: 17px;
+  height: 11px;
+}
+
+.credpagos-card-brand-mastercard span {
+  position: absolute;
+  top: 0;
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+}
+
+.credpagos-card-brand-mastercard span:first-child {
+  left: 0;
+  background: #eb001b;
+}
+
+.credpagos-card-brand-mastercard span:last-child {
+  right: 0;
+  background: rgba(247, 158, 27, 0.86);
+}
+
+.credpagos-card-brand-visa {
+  font-size: 7px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+.credpagos-card-benefits {
+  display: grid;
+  width: 230px;
+  padding: 18px 16px;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.credpagos-card-benefit-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 35px;
+}
+
+.credpagos-card-benefit-row+.credpagos-card-benefit-row {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #d2d4d8;
+}
+
+.credpagos-card-benefit-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  color: #25272b;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.credpagos-card-benefit-label svg {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  color: #33363b;
+}
+
+.credpagos-card-benefit-row strong {
+  padding-right: 0;
+  color: #000000;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.35;
   text-align: right;
 }
 
-.credpagos-loan-simulator-button {
-  width: min(280px, 100%);
-  min-height: 48px;
-  border: 0;
+.credpagos-card-benefit-row:has(.credpagos-card-benefit-chevron) strong {
+  padding-right: 17px;
+}
+
+.credpagos-card-benefit-chevron {
+  position: absolute;
+  right: -1px;
+  width: 14px;
+  height: 14px;
+  color: #000000;
+}
+
+.credpagos-card-simulator__media {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 260px;
+}
+
+.credpagos-card-image-slot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 252px;
+  height: 260px;
+  overflow: visible;
+}
+
+.credpagos-card-image {
+  width: 460px;
+  max-width: none;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-100px, 4px);
+}
+
+.credpagos-card-simulator__form-card {
+  display: grid;
+  align-content: start;
+  width: 196px;
+  padding: 16px 16px 15px;
   border-radius: 8px;
+  background: #ffffff;
+  transform: translateY(18px);
+}
+
+.credpagos-card-simulator__form-card h2 {
+  margin: 0 0 5px;
+  color: #000000;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+
+.credpagos-card-simulator__form-card label {
+  color: #0f1b2d;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.credpagos-card-simulator__form-card input {
+  width: 100%;
+  height: 27px;
+  margin-top: 20px;
+  border: 0;
+  border-bottom: 1px solid #636a73;
+  border-radius: 0;
+  background: transparent;
+  color: #000000;
+  font: 16px;
+  font-size: 16px;
+  outline: none;
+}
+
+.credpagos-card-simulator__form-card input:focus {
+  border-bottom-color: #000000;
+}
+
+.credpagos-card-simulator__form-card button {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 32px;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 5px;
   background: #5493ff;
   color: #ffffff;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 12px 28px rgba(84, 147, 255, 0.22);
+  box-shadow: 0 10px 22px rgba(84, 147, 255, 0.28);
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
+
+.credpagos-card-simulator__form-card button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -45%;
+  width: 38%;
+  background: linear-gradient(105deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.18) 48%,
+      transparent 100%);
+  transform: skewX(-18deg);
+}
+
+.credpagos-card-simulator__form-card button:not(:disabled) {
+  animation: credpagos-card-button-breathe 2.6s ease-in-out infinite;
+}
+
+.credpagos-card-simulator__form-card button:not(:disabled)::after {
+  animation: credpagos-card-button-shine 2.8s ease-in-out infinite;
+}
+
+.credpagos-card-simulator__form-card button:not(:disabled):hover {
+  background: #3f7fea;
+  box-shadow: 0 14px 30px rgba(84, 147, 255, 0.36);
+  transform: translateY(-2px);
+}
+
+.credpagos-card-simulator__form-card button:not(:disabled):active {
+  box-shadow: 0 8px 18px rgba(84, 147, 255, 0.26);
+  transform: translateY(0) scale(0.99);
+}
+
+.credpagos-card-simulator__form-card button:disabled {
+  background: #c9cbcd;
+  color: #999999;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.credpagos-card-simulator__form-card button:disabled::after {
+  display: none;
+}
+
+/* ========================
+   Card Intro Animations
+======================== */
+
+@keyframes credpagos-card-button-breathe {
+
+  0%,
+  100% {
+    box-shadow: 0 10px 22px rgba(84, 147, 255, 0.28);
+  }
+
+  50% {
+    box-shadow: 0 14px 30px rgba(84, 147, 255, 0.42);
+  }
+}
+
+@keyframes credpagos-card-button-shine {
+
+  0%,
+  42% {
+    left: -45%;
+  }
+
+  72%,
+  100% {
+    left: 112%;
+  }
+}
+
+/* ========================
+   Card Application Legacy
+======================== */
+
+.credpagos-card-application {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: calc(100svh - 51px);
+  background: #ffffff;
+  color: #000000;
+}
+
+.credpagos-card-application__summary {
+  background: #f0f1f3;
+}
+
+.credpagos-card-application__summary-inner {
+  width: clamp(300px, 28vw, 360px);
+  padding-top: clamp(34px, 3.4vw, 64px);
+  margin-left: clamp(140px, calc(50vw - 310px), 365px);
+}
+
+.credpagos-card-application__summary h1 {
+  width: 100%;
+  margin: 0;
+  color: #000000;
+  font-size: clamp(16px, 1.4vw, 22px);
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+.credpagos-card-application-preview {
+  display: grid;
+  grid-template-columns: clamp(92px, 8vw, 116px) minmax(0, 1fr);
+  gap: clamp(23px, 2.2vw, 32px);
+  align-items: center;
+  width: clamp(267px, 25vw, 335px);
+  min-height: clamp(176px, 15.5vw, 220px);
+  margin-top: clamp(20px, 2.1vw, 28px);
+  padding: clamp(14px, 1.4vw, 18px);
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.credpagos-card-application-preview__media {
+  position: relative;
+  width: clamp(92px, 8vw, 116px);
+  height: clamp(148px, 12.9vw, 187px);
+  overflow: hidden;
+  border-radius: 5px;
+  background: #2f344f;
+}
+
+.credpagos-card-application-preview__image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(148px, 12.9vw, 187px);
+  max-width: none;
+  height: clamp(92px, 8vw, 116px);
+  object-fit: cover;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  transform-origin: center;
+}
+
+.credpagos-card-application-preview__benefits {
+  display: grid;
+  min-width: 0;
+}
+
+.credpagos-card-application-preview__row {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(8px, 0.9vw, 12px);
+  min-height: clamp(52px, 5vw, 66px);
+  color: #000000;
+}
+
+.credpagos-card-application-preview__row+.credpagos-card-application-preview__row {
+  border-top: 1px solid #d9dbe0;
+}
+
+.credpagos-card-application-preview__row svg {
+  color: #30343a;
+}
+
+.credpagos-card-application-preview__row div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.credpagos-card-application-preview__row strong {
+  color: #000000;
+  font-size: clamp(8px, 0.75vw, 11px);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.credpagos-card-application-preview__row span {
+  color: #2c3036;
+  font-size: clamp(8px, 0.75vw, 11px);
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.credpagos-card-application__form-side {
+  display: grid;
+  align-content: start;
+  padding: clamp(88px, 9.5vw, 170px) 0 56px clamp(42px, 4.5vw, 86px);
+  background: #ffffff;
+}
+
+.credpagos-card-application__form {
+  display: grid;
+  gap: 16px;
+  width: min(330px, calc(100% - 42px));
+}
+
+.credpagos-card-application__form .credpagos-form-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+
+.credpagos-card-application__form .credpagos-form-group {
+  gap: 4px;
+}
+
+.credpagos-card-application__form .credpagos-form-label {
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.credpagos-card-application__form .credpagos-form-input,
+.credpagos-card-application__form .credpagos-form-select,
+.credpagos-card-application__form .credpagos-form-textarea {
+  min-height: 34px;
+  border: 0;
+  border-bottom: 1px solid #111827;
+  border-radius: 0;
+  background: transparent;
+  padding: 0 0 6px;
+  color: #000000;
+  font-size: 16px;
+}
+
+.credpagos-card-application__form .credpagos-form-input:focus,
+.credpagos-card-application__form .credpagos-form-select:focus,
+.credpagos-card-application__form .credpagos-form-textarea:focus {
+  outline: 0;
+  border-bottom-color: #5493ff;
+}
+
+.credpagos-card-application__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: clamp(48px, 6vw, 74px);
+}
+
+.credpagos-card-application__back,
+.credpagos-card-application__continue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.credpagos-card-application__back {
+  min-height: clamp(27px, 3vw, 40px);
+  padding: 0 10px;
+  gap: 3px;
+  background: transparent;
+  color: #6b7280;
+  font-size: clamp(10px, 1vw, 13px);
+}
+
+.credpagos-card-application__back:hover {
+  color: #111827;
+  transform: translateX(-1px);
+}
+
+.credpagos-card-application__continue {
+  width: clamp(105px, 12vw, 160px);
+  min-height: clamp(27px, 3vw, 40px);
+  gap: clamp(14px, 1.8vw, 26px);
+  background: #5493ff;
+  color: #ffffff;
+  font-size: clamp(10px, 1vw, 14px);
+  box-shadow: 0 10px 24px rgba(84, 147, 255, 0.2);
+}
+
+.credpagos-card-application__continue:not(:disabled):hover {
+  background: #3f7fea;
+  box-shadow: 0 14px 30px rgba(84, 147, 255, 0.28);
+  transform: translateY(-1px);
+}
+
+.credpagos-card-application__continue:disabled {
+  background: #cfd2d5;
+  color: #9b9b9b;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ========================
+   Card Legacy Responsive Desktop
+======================== */
+
+@media (min-width: 1280px) {
+  .credpagos-card-topbar__inner {
+    width: min(1190px, calc(100% - 64px));
+  }
+
+  .credpagos-card-topbar__logo {
+    width: 166px;
+    height: 40px;
+    transform: none;
+  }
+
+  .credpagos-card-topbar__back {
+    font-size: 13px;
+  }
+
+  .credpagos-card-topbar__back svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .credpagos-card-simulator {
+    grid-template-columns: 335px 460px 285px;
+    gap: 55px;
+    width: min(1190px, calc(100% - 64px));
+    padding-top: 140px;
+    transform: none;
+  }
+
+  .credpagos-card-simulator__details {
+    gap: 35px;
+  }
+
+  .credpagos-card-simulator__details h1 {
+    font-size: 36px;
+  }
+
+  .credpagos-card-brand-row {
+    gap: 18px;
+  }
+
+  .credpagos-card-brand-row>span {
+    font-size: 14px;
+  }
+
+  .credpagos-card-brand-options {
+    gap: 8px;
+  }
+
+  .credpagos-card-brand-button {
+    width: 45px;
+    height: 29px;
+    border-radius: 5px;
+  }
+
+  .credpagos-card-brand-mastercard {
+    width: 25px;
+    height: 16px;
+  }
+
+  .credpagos-card-brand-mastercard span {
+    width: 16px;
+    height: 16px;
+  }
+
+  .credpagos-card-brand-visa {
+    font-size: 10px;
+  }
+
+  .credpagos-card-benefits {
+    width: 335px;
+    padding: 26px 24px;
+    border-radius: 12px;
+  }
+
+  .credpagos-card-benefit-row {
+    gap: 15px;
+    min-height: 52px;
+  }
+
+  .credpagos-card-benefit-row+.credpagos-card-benefit-row {
+    margin-top: 20px;
+    padding-top: 20px;
+  }
+
+  .credpagos-card-benefit-label {
+    gap: 13px;
+    font-size: 14px;
+  }
+
+  .credpagos-card-benefit-label svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .credpagos-card-benefit-row strong {
+    font-size: 14px;
+  }
+
+  .credpagos-card-benefit-row:has(.credpagos-card-benefit-chevron) strong {
+    padding-right: 26px;
+  }
+
+  .credpagos-card-benefit-chevron {
+    width: 20px;
+    height: 20px;
+  }
+
+  .credpagos-card-simulator__media {
+    min-height: 390px;
+  }
+
+  .credpagos-card-image-slot {
+    width: 460px;
+    height: 390px;
+  }
+
+  .credpagos-card-image {
+    width: 780px;
+    transform: translate(-160px, 2px);
+  }
+
+  .credpagos-card-simulator__form-card {
+    width: 285px;
+    padding: 24px;
+    border-radius: 12px;
+    transform: translateY(26px);
+  }
+
+  .credpagos-card-simulator__form-card h2 {
+    margin-bottom: 8px;
+    font-size: 21px;
+  }
+
+  .credpagos-card-simulator__form-card label {
+    font-size: 14px;
+  }
+
+  .credpagos-card-simulator__form-card input {
+    height: 36px;
+    margin-top: 24px;
+    font-size: 18px;
+  }
+
+  .credpagos-card-simulator__form-card button {
+    min-height: 46px;
+    margin-top: 12px;
+    border-radius: 8px;
+    font-size: 18px;
+  }
+
+  .credpagos-card-application__summary-inner {
+    width: clamp(420px, 29vw, 560px);
+    padding-top: 72px;
+    margin-left: clamp(260px, calc(50vw - 650px), 340px);
+  }
+
+  .credpagos-card-application__summary h1 {
+    font-size: clamp(26px, 1.75vw, 34px);
+    line-height: 1.32;
+  }
+
+  .credpagos-card-application-preview {
+    grid-template-columns: clamp(150px, 9vw, 175px) minmax(0, 1fr);
+    gap: clamp(34px, 2.7vw, 52px);
+    width: clamp(420px, 27vw, 520px);
+    min-height: clamp(250px, 16vw, 310px);
+    margin-top: 32px;
+    padding: 24px;
+    border-radius: 10px;
+  }
+
+  .credpagos-card-application-preview__media {
+    width: clamp(150px, 9vw, 175px);
+    height: clamp(235px, 14vw, 270px);
+    border-radius: 8px;
+  }
+
+  .credpagos-card-application-preview__image {
+    width: clamp(235px, 14vw, 270px);
+    height: clamp(150px, 9vw, 175px);
+  }
+
+  .credpagos-card-application-preview__row {
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: 16px;
+    min-height: clamp(94px, 6.8vw, 126px);
+  }
+
+  .credpagos-card-application-preview__row svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .credpagos-card-application-preview__row strong,
+  .credpagos-card-application-preview__row span {
+    font-size: clamp(14px, 0.9vw, 17px);
+  }
+
+  .credpagos-card-application__form {
+    width: min(430px, calc(100% - 42px));
+  }
+
+  .credpagos-card-application__form .credpagos-form-label {
+    font-size: 16px;
+  }
+
+  .credpagos-card-application__form .credpagos-form-input,
+  .credpagos-card-application__form .credpagos-form-select,
+  .credpagos-card-application__form .credpagos-form-textarea {
+    min-height: 44px;
+    font-size: 20px;
+  }
+
+  .credpagos-card-application__continue {
+    width: 190px;
+    min-height: 50px;
+    font-size: 16px;
+  }
+}
+
+/* ========================
+   Card Legacy Responsive Tablet
+======================== */
+
+@media (max-width: 820px) {
+
+  html:has(.credpagos-card-simulator),
+  body:has(.credpagos-card-simulator) {
+    overflow: auto;
+  }
+
+  .credpagos-card-simulator {
+    grid-template-columns: minmax(0, 1fr);
+    width: min(100%, calc(100% - 32px));
+    min-height: auto;
+    padding: 54px 0 42px;
+    transform: none;
+  }
+
+  .credpagos-card-simulator__details,
+  .credpagos-card-simulator__form-card,
+  .credpagos-card-benefits {
+    width: 100%;
+  }
+
+  .credpagos-card-brand-row {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+
+  .credpagos-card-simulator__media {
+    min-height: 220px;
+  }
+
+  .credpagos-card-image-slot {
+    width: min(100%, 260px);
+    height: 220px;
+  }
+
+  .credpagos-card-image {
+    width: 390px;
+    transform: translate(-74px, 0);
+  }
+
+  .credpagos-card-simulator__form-card {
+    justify-self: stretch;
+    transform: none;
+  }
+
+  .credpagos-card-application {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .credpagos-card-application__summary-inner {
+    width: min(100%, calc(100% - 32px));
+    padding: 42px 0 34px;
+    margin: 0 auto;
+  }
+
+  .credpagos-card-application-preview {
+    width: 100%;
+  }
+
+  .credpagos-card-application__form-side {
+    padding: 34px 16px 48px;
+  }
+
+  .credpagos-card-application__form {
+    width: 100%;
+  }
+
+  .credpagos-card-application__actions {
+    margin-top: 32px;
+  }
+
+  .credpagos-card-application__continue {
+    width: 100%;
+  }
+}
+
+/* ========================
+   Card Legacy Responsive Mobile
+======================== */
+
+@media (max-width: 480px) {
+  .credpagos-card-benefits {
+    padding: 20px 16px;
+  }
+
+  .credpagos-card-benefit-row {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .credpagos-card-benefit-row strong {
+    text-align: left;
+  }
+
+  .credpagos-card-benefit-row:has(.credpagos-card-benefit-chevron) strong {
+    padding-right: 28px;
+  }
+
+  .credpagos-card-application-preview {
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 16px;
+    min-height: 156px;
+    padding: 12px;
+  }
+
+  .credpagos-card-application-preview__media {
+    width: 82px;
+    height: 132px;
+  }
+
+  .credpagos-card-application-preview__image {
+    width: 132px;
+    height: 82px;
+  }
+
+  .credpagos-card-application__actions {
+    display: grid;
+  }
+}
+
+/* ========================
+   Simulation Loading
+======================== */
 
 .credpagos-simulation-loading-shell {
   display: grid;
@@ -340,16 +1154,22 @@
 }
 
 @keyframes credpagos-simulation-logo-pulse {
+
   0%,
   100% {
     opacity: 0.48;
     transform: scale(0.94);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.05);
   }
 }
+
+/* ========================
+   Wizard Base
+======================== */
 
 .credpagos-wizard-progress {
   padding: 1rem;
@@ -455,7 +1275,7 @@
   background: #fff;
   color: #0f172a;
   padding: 0.62rem 0.72rem;
-  font-size: 0.93rem;
+  font-size: 16px;
 }
 
 .credpagos-form-textarea {
@@ -505,6 +1325,10 @@
   padding: 0.85rem;
   box-shadow: 0 12px 26px rgba(15, 23, 42, 0.06);
 }
+
+/* ========================
+   Analysis Extended
+======================== */
 
 .credpagos-analysis-loading-card {
   display: grid;
@@ -626,13 +1450,19 @@
   0% {
     transform: translateX(-110%);
   }
+
   50% {
     transform: translateX(70%);
   }
+
   100% {
     transform: translateX(250%);
   }
 }
+
+/* ========================
+   Approval
+======================== */
 
 .credpagos-approval-flow {
   display: grid;
@@ -844,6 +1674,10 @@
   color: #5493ff;
 }
 
+/* ========================
+   Installments
+======================== */
+
 .credpagos-installment-options {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -913,6 +1747,10 @@
   font-size: 0.82rem;
   font-weight: 800;
 }
+
+/* ========================
+   Pix Simulation Legacy
+======================== */
 
 .credpagos-pix-simulation-card {
   display: grid;
@@ -1114,6 +1952,10 @@
   justify-items: start;
 }
 
+/* ========================
+   Receiving and Timeline
+======================== */
+
 .credpagos-receiving-card {
   display: grid;
   gap: 1rem;
@@ -1200,6 +2042,10 @@
   background: #5493ff;
 }
 
+/* ========================
+   Admin
+======================== */
+
 .credpagos-admin-dashboard {
   display: grid;
   gap: 1rem;
@@ -1270,6 +2116,10 @@
   gap: 0.35rem;
 }
 
+/* ========================
+   Generic Upload Mini
+======================== */
+
 .credpagos-doc-upload {
   border: 1px dashed #bfdbfe;
   border-radius: 12px;
@@ -1298,6 +2148,10 @@
 .credpagos-p {
   color: #1e1e1e;
 }
+
+/* ========================
+   Generic Proposal and Alerts
+======================== */
 
 .credpagos-proposta-card,
 .credpagos-contrato-preview,
@@ -1364,6 +2218,10 @@
   background: #fff;
 }
 
+/* ========================
+   Legacy Global Responsive
+======================== */
+
 @media (max-width: 1080px) {
   .credpagos-admin-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1385,14 +2243,6 @@
 
   .credpagos-form-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .credpagos-loan-simulator-card {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .credpagos-loan-simulator-note {
-    text-align: left;
   }
 
   .credpagos-wizard-actions {
@@ -1441,9 +2291,9 @@
 }
 
 
-/*====================
-Simulador
-====================*/
+/* ========================
+   Simulador
+======================== */
 
 .credpagos-request-step {
   display: grid;
@@ -1534,13 +2384,11 @@ Simulador
   border-radius: 999px;
   outline: none;
   cursor: pointer;
-  background: linear-gradient(
-    90deg,
-    #5493ff 0%,
-    #5493ff var(--credpagos-range-progress),
-    #e5e7eb var(--credpagos-range-progress),
-    #e5e7eb 100%
-  );
+  background: linear-gradient(90deg,
+      #5493ff 0%,
+      #5493ff var(--credpagos-range-progress),
+      #e5e7eb var(--credpagos-range-progress),
+      #e5e7eb 100%);
 }
 
 .credpagos-simulator-range::-webkit-slider-thumb {
@@ -1650,6 +2498,7 @@ Simulador
 }
 
 @media (max-width: 640px) {
+
   .credpagos-simulator-card,
   .credpagos-request-required-card {
     border-radius: 22px;
@@ -1668,11 +2517,11 @@ Simulador
     height: 32px;
   }
 }
-  
 
-/*====================
-Upload
-====================*/
+
+/* ========================
+   Upload
+======================== */
 .credpagos-doc-upload {
   display: grid;
   gap: 24px;
@@ -1838,6 +2687,913 @@ Upload
   opacity: 0.65;
 }
 
+/* ========================
+   CredPagos Card Flow
+======================== */
+
+/* ========================
+   Estrutura Base
+======================== */
+
+.credpagos-card-request-shell {
+  width: 100%;
+  min-height: 100svh;
+}
+
+.credpagos-card-request {
+  display: grid;
+  grid-template-columns: minmax(380px, 48%) minmax(0, 52%);
+  align-items: start;
+  min-height: calc(100svh - 51px);
+}
+
+/* ========================
+   Coluna Esquerda
+======================== */
+
+.credpagos-card-request-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: start;
+  position: sticky;
+  top: 51px;
+  height: calc(100svh - 51px);
+  min-height: calc(100svh - 51px);
+  padding: 56px 48px;
+  background: #f0f1f3;
+}
+
+.credpagos-card-request-left__customer {
+  margin: 0;
+  color: #2f3640;
+  font-size: 14px;
+  text-align: center;
+}
+
+.credpagos-card-request-offer {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  align-items: center;
+  gap: 38px;
+  width: min(640px, 92%);
+  min-height: 360px;
+  padding: 34px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.06),
+    inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+.credpagos-card-request-offer__media {
+  position: relative;
+  width: 210px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #e7e9ee;
+}
+
+.credpagos-card-request-offer__image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  max-width: none;
+  height: 210px;
+  object-fit: cover;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.credpagos-card-request-offer__benefits {
+  display: grid;
+  align-content: center;
+}
+
+.credpagos-card-request-offer__row {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  min-height: 104px;
+}
+
+.credpagos-card-request-offer__row+.credpagos-card-request-offer__row {
+  border-top: 1px solid rgba(15, 23, 42, 0.16);
+}
+
+.credpagos-card-request-offer__row svg {
+  width: 22px;
+  height: 22px;
+  color: #111111;
+}
+
+.credpagos-card-request-offer__row strong {
+  display: block;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.credpagos-card-request-offer__row span {
+  display: block;
+  margin-top: 5px;
+  color: #1c1f23;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+/* ========================
+   Responsivo
+======================== */
+
+@media (max-width: 1100px) {
+  .credpagos-card-request-left {
+    padding: 40px 24px;
+  }
+
+  .credpagos-card-request-offer {
+    grid-template-columns: 180px minmax(0, 1fr);
+    width: min(560px, 100%);
+    min-height: 320px;
+    gap: 28px;
+    padding: 28px;
+  }
+
+  .credpagos-card-request-offer__media {
+    width: 180px;
+    height: 270px;
+  }
+
+  .credpagos-card-request-offer__image {
+    width: 270px;
+    height: 180px;
+  }
+}
+
+@media (max-width: 760px) {
+  .credpagos-card-request-left {
+    min-height: auto;
+    padding: 32px 18px;
+  }
+
+  .credpagos-card-request-offer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    width: 100%;
+    min-height: auto;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .credpagos-card-request-offer__media {
+    width: 170px;
+    height: 250px;
+  }
+
+  .credpagos-card-request-offer__image {
+    width: 250px;
+    height: 170px;
+  }
+
+  .credpagos-card-request-offer__benefits {
+    width: 100%;
+  }
+
+  .credpagos-card-request-offer__row {
+    min-height: 82px;
+  }
+}
+
+/* ========================
+   Coluna Direita e Progresso
+======================== */
+
+.credpagos-card-request-right {
+  display: grid;
+  align-content: start;
+  align-self: stretch;
+  gap: 38px;
+  min-height: calc(100svh - 51px);
+  height: calc(100svh - 51px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 68px clamp(28px, 5vw, 88px) 60px;
+  background: #ffffff;
+}
+
+.credpagos-card-request-progress {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.credpagos-card-request-progress__line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.credpagos-card-request-progress__line strong {
+  margin: 0;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.credpagos-card-request-progress__line span {
+  color: #111111;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.credpagos-card-request-progress__track {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #cfd2d8;
+}
+
+.credpagos-card-request-progress__track span {
+  display: block;
+  width: 20%;
+  height: 100%;
+  border-radius: inherit;
+  background: #5493ff;
+  transition: width 220ms ease;
+}
+
+.credpagos-card-request-content {
+  display: grid;
+  gap: 28px;
+}
+
+.credpagos-card-request-content h2 {
+  margin: 0;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+/* ========================
+   Responsivo
+======================== */
+
+@media (max-width: 1100px) {
+  .credpagos-card-request-right {
+    padding: 48px 32px 52px;
+  }
+}
+
+@media (max-width: 760px) {
+  .credpagos-card-request-right {
+    gap: 30px;
+    padding: 34px 20px 42px;
+  }
+
+  .credpagos-card-request-progress__line strong,
+  .credpagos-card-request-progress__line span {
+    font-size: 13px;
+  }
+
+  .credpagos-card-request-content h2 {
+    font-size: 16px;
+  }
+}
+
+/* ========================
+   Campo flutuante
+======================== */
+
+.credpagos-card-field {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.credpagos-card-field--floating {
+  min-height: 56px;
+}
+
+.credpagos-card-field--floating input,
+.credpagos-card-field--floating select,
+.credpagos-card-field--floating textarea {
+  width: 100%;
+  height: 56px;
+  border: 0;
+  border-bottom: 1px solid #d7d9de;
+  border-radius: 0;
+  background: transparent;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.2;
+  padding: 22px 0 8px;
+  outline: none;
+}
+
+.credpagos-card-field--floating input::placeholder,
+.credpagos-card-field--floating textarea::placeholder {
+  color: transparent;
+}
+
+.credpagos-card-field--floating label {
+  position: absolute;
+  left: 0;
+  top: 22px;
+  margin: 0;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  pointer-events: none;
+  transform-origin: left top;
+  transition:
+    top 0.18s ease,
+    transform 0.18s ease,
+    font-size 0.18s ease,
+    color 0.18s ease;
+}
+
+/* linha ativa */
+.credpagos-card-field--floating input:focus,
+.credpagos-card-field--floating select:focus,
+.credpagos-card-field--floating textarea:focus {
+  border-bottom-color: #5493ff;
+}
+
+/* label sobe quando clica ou quando tem valor */
+.credpagos-card-field--floating:focus-within label,
+.credpagos-card-field--floating input:not(:placeholder-shown)+label,
+.credpagos-card-field--floating textarea:not(:placeholder-shown)+label,
+.credpagos-card-field--floating select:valid+label,
+.credpagos-card-field--floating.is-filled label {
+  top: 6px;
+  font-size: 12px;
+  transform: translateY(0);
+  color: #111111;
+}
+
+/* disabled */
+.credpagos-card-field--floating input:disabled,
+.credpagos-card-field--floating select:disabled,
+.credpagos-card-field--floating textarea:disabled {
+  opacity: 0.56;
+  cursor: not-allowed;
+}
+
+.credpagos-card-searchable {
+  position: relative;
+}
+
+.credpagos-card-searchable input {
+  padding-right: 42px;
+}
+
+.credpagos-card-searchable__toggle {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #5d6b82;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.credpagos-card-searchable__toggle:hover {
+  background: #eef4ff;
+  color: #234fa7;
+}
+
+.credpagos-card-searchable.is-open .credpagos-card-searchable__toggle {
+  color: #234fa7;
+}
+
+.credpagos-card-searchable.is-open .credpagos-card-searchable__toggle svg {
+  transform: rotate(180deg);
+}
+
+.credpagos-card-searchable__toggle svg {
+  transition: transform 0.18s ease;
+}
+
+.credpagos-card-searchable__list {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 8px;
+  max-height: 236px;
+  overflow-y: auto;
+  border: 1px solid #d9dde4;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+  list-style: none;
+}
+
+.credpagos-card-searchable__list li+li {
+  margin-top: 2px;
+}
+
+.credpagos-card-searchable__list li button {
+  width: 100%;
+  min-height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #111111;
+  font-size: 15px;
+  text-align: left;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+.credpagos-card-searchable__list li button:hover,
+.credpagos-card-searchable__list li button.is-selected {
+  background: #eef4ff;
+  color: #123f95;
+}
+
+.credpagos-card-searchable__list li button.is-selected {
+  font-weight: 600;
+}
+
+.credpagos-card-searchable__empty {
+  color: #687385;
+  font-size: 14px;
+  padding: 8px 10px;
+}
+
+/* ========================
+   Responsivo
+======================== */
+
+@media (max-width: 760px) {
+  .credpagos-card-field--floating {
+    min-height: 52px;
+  }
+
+  .credpagos-card-field--floating input,
+  .credpagos-card-field--floating select,
+  .credpagos-card-field--floating textarea {
+    height: 52px;
+    font-size: 15px;
+    padding: 20px 0 8px;
+  }
+
+  .credpagos-card-field--floating label {
+    top: 20px;
+    font-size: 15px;
+  }
+
+  .credpagos-card-field--floating:focus-within label,
+  .credpagos-card-field--floating input:not(:placeholder-shown)+label,
+  .credpagos-card-field--floating textarea:not(:placeholder-shown)+label,
+  .credpagos-card-field--floating select:valid+label,
+  .credpagos-card-field--floating.is-filled label {
+    top: 5px;
+    font-size: 11px;
+  }
+}
+
+/* ========================
+   Botões
+======================== */
+
+.credpagos-card-request-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 206px;
+  min-height: 58px;
+  margin-top: 34px;
+  border: 0;
+  border-radius: 14px;
+  background: #c9cbcd;
+  color: #7a7f85;
+  font-size: 20px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.credpagos-card-request-button:disabled {
+  cursor: not-allowed;
+}
+
+.credpagos-card-request-button--active,
+.credpagos-card-request-button:not(:disabled) {
+  background: #5493ff;
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(84, 147, 255, 0.24);
+}
+
+.credpagos-card-request-button--active:hover,
+.credpagos-card-request-button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+/* ========================
+   Etapa Análise
+======================== */
+
+.credpagos-card-request-analysis {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 22px;
+  min-height: 440px;
+}
+
+.credpagos-card-request-analysis__spinner {
+  width: 128px;
+  height: 128px;
+  color: #1f6fe6;
+  animation: credpagos-card-request-spin 1.05s linear infinite;
+  filter: drop-shadow(0 8px 14px rgba(31, 111, 230, 0.25));
+}
+
+.credpagos-card-request-analysis__lottie {
+  width: 128px;
+  height: 128px;
+  filter: drop-shadow(0 10px 18px rgba(31, 111, 230, 0.2));
+}
+
+.credpagos-card-request-analysis strong {
+  font-size: clamp(38px, 2.1vw, 50px);
+}
+
+/* ========================
+   Tela Limite Aprovado
+======================== */
+
+.credpagos-card-approved {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 14px;
+  width: min(960px, calc(100% - 48px));
+  min-height: calc(100svh - 51px);
+  margin: 0 auto;
+  padding-top: clamp(90px, 12vh, 160px);
+}
+
+.credpagos-card-approved__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  border: 4px solid #65dd46;
+  color: #65dd46;
+}
+
+.credpagos-card-approved h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.credpagos-card-approved strong {
+  color: #000000;
+  font-size: 48px;
+  line-height: 1;
+}
+
+.credpagos-card-approved__card {
+  width: 320px;
+  height: auto;
+  border-radius: 16px;
+}
+
+.credpagos-card-approved__card-frame {
+  position: relative;
+  width: 320px;
+  margin-top: 18px;
+}
+
+.credpagos-card-approved__holder-name {
+  position: absolute;
+  left: 36px;
+  right: 124px;
+  bottom: 48px;
+  overflow: hidden;
+  color: #f8fbff;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 6px rgba(3, 10, 28, 0.4);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: credpagos-card-approved-name-in 720ms ease 180ms forwards;
+}
+
+.credpagos-card-approved p {
+  margin: 14px 0 0;
+  max-width: 740px;
+  color: #1f2937;
+  font-size: 16px;
+  text-align: center;
+  line-height: 1.35;
+}
+
+.credpagos-card-approved .credpagos-card-request-button {
+  margin-top: 20px;
+}
+
+/* ========================
+   Tela Pix e Pagamento
+======================== */
+
+.credpagos-card-pix-panel {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.credpagos-card-pix-panel h2 {
+  margin: 0;
+  color: #111111;
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.4px;
+}
+
+.credpagos-card-pix-panel>p {
+  max-width: 260px;
+  margin: 12px auto 0;
+  color: #4b5563;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.credpagos-card-pix-summary {
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid #d9dde4;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+  text-align: left;
+}
+
+.credpagos-card-pix-summary ul {
+  display: grid;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.credpagos-card-pix-summary li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  color: #1f2937;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.credpagos-card-pix-summary li strong {
+  color: #111111;
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.credpagos-card-pix-summary__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #d9dde4;
+}
+
+.credpagos-card-pix-summary__total span,
+.credpagos-card-pix-summary__total strong {
+  color: #0f4ecb;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.credpagos-card-pix-qr {
+  display: grid;
+  place-items: center;
+  width: 240px;
+  min-height: 240px;
+  margin-top: 20px;
+  padding: 14px;
+  border: 1px solid #e0e3e8;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.credpagos-card-pix-qr img {
+  display: block;
+  width: 190px;
+  height: 190px;
+  object-fit: contain;
+}
+
+.credpagos-card-pix-qr__placeholder {
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.credpagos-card-pix-copy {
+  width: 100%;
+  margin-top: 16px;
+  text-align: left;
+}
+
+.credpagos-card-pix-copy h3 {
+  position: relative;
+  margin: 0;
+  padding-left: 32px;
+  color: #111111;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.credpagos-card-pix-copy p {
+  margin: 5px 0 0;
+  padding-left: 32px;
+  color: #4b5563;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.credpagos-card-pix-copy__code {
+  width: 100%;
+  max-height: 68px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  overflow: hidden;
+  border: 1px solid #b8bdc6;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 10px;
+  line-height: 1.35;
+  text-align: left;
+  word-break: break-all;
+}
+
+.credpagos-card-pix-copy .credpagos-card-request-button {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 10px;
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+.credpagos-card-pix-note {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  width: 100%;
+  margin-top: 18px;
+  text-align: left;
+}
+
+.credpagos-card-pix-note svg {
+  width: 18px;
+  height: 18px;
+  color: #8b919c;
+}
+
+.credpagos-card-pix-note p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.credpagos-card-pix-note small {
+  display: block;
+  margin-top: 7px;
+  color: #8b919c;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.credpagos-card-pix-copy__done {
+  display: block;
+  margin-top: 9px;
+  color: #2563eb;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ========================
+   Responsivo
+======================== */
+
+@media (max-width: 760px) {
+  .credpagos-card-pix-panel {
+    max-width: 100%;
+  }
+
+  .credpagos-card-pix-panel h2 {
+    font-size: 24px;
+  }
+
+  .credpagos-card-pix-panel>p {
+    max-width: 250px;
+    font-size: 10px;
+  }
+
+  .credpagos-card-pix-summary {
+    max-width: 300px;
+  }
+
+  .credpagos-card-pix-qr {
+    width: 230px;
+    min-height: 230px;
+  }
+
+  .credpagos-card-pix-qr img {
+    width: 180px;
+    height: 180px;
+  }
+
+  .credpagos-card-pix-copy {
+    max-width: 300px;
+  }
+
+  .credpagos-card-pix-note {
+    max-width: 300px;
+  }
+}
+
+/* ========================
+   Animações
+======================== */
+
+@keyframes credpagos-card-request-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes credpagos-card-approved-name-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================
+   Responsividade Upload
+======================== */
+
 @media (max-width: 768px) {
   .credpagos-doc-upload-header {
     display: grid;
@@ -1873,5 +3629,257 @@ Upload
   .credpagos-doc-upload-actions .credpagos-credito-button {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* ========================
+   Responsividade Card Flow (Desktop Intermediário)
+======================== */
+
+@media (max-width: 1600px) {
+  .credpagos-card-request-offer {
+    width: clamp(420px, 85%, 620px);
+    min-height: 300px;
+    grid-template-columns: 152px minmax(0, 1fr);
+  }
+
+  .credpagos-card-request-offer__media {
+    width: 152px;
+    height: 246px;
+  }
+
+  .credpagos-card-request-offer__image {
+    width: 246px;
+    height: 152px;
+  }
+
+  .credpagos-card-request-progress__line strong {
+    font-size: 16px;
+  }
+
+  .credpagos-card-request-progress__line span {
+    font-size: clamp(19px, 1.2vw, 26px);
+  }
+
+  .credpagos-card-request-content h2 {
+    font-size: 22px;
+  }
+
+  .credpagos-card-field input,
+  .credpagos-card-field select {
+    font-size: 12px;
+  }
+
+  .credpagos-card-request-legal {
+    font-size: clamp(17px, 1.05vw, 21px);
+  }
+
+  .credpagos-card-request-button {
+    font-size: 13px;
+  }
+}
+
+/* ========================
+   Responsividade Card Flow (Tablet)
+======================== */
+
+@media (max-width: 1180px) {
+  .credpagos-card-request {
+    grid-template-columns: 1fr;
+  }
+
+  .credpagos-card-request-left {
+    position: static;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    padding: 24px 20px 12px;
+  }
+
+  .credpagos-card-request-offer {
+    width: min(100%, 720px);
+  }
+
+  .credpagos-card-request-right {
+    min-height: 0;
+    height: auto;
+    overflow-y: visible;
+    padding: 32px 20px 44px;
+    gap: 24px;
+  }
+
+  .credpagos-card-request-analysis {
+    min-height: 250px;
+  }
+
+  .credpagos-card-approved {
+    padding-top: 56px;
+  }
+}
+
+/* ========================
+   Responsividade Card Flow (Mobile)
+======================== */
+
+@media (max-width: 760px) {
+  .credpagos-card-request-offer {
+    grid-template-columns: 102px minmax(0, 1fr);
+    gap: 16px;
+    width: min(100%, 520px);
+    min-height: 210px;
+    padding: 14px;
+  }
+
+  .credpagos-card-request-offer__media {
+    width: 102px;
+    height: 166px;
+    border-radius: 8px;
+  }
+
+  .credpagos-card-request-offer__image {
+    width: 166px;
+    height: 102px;
+  }
+
+  .credpagos-card-request-offer__row {
+    grid-template-columns: 18px minmax(0, 1fr);
+    min-height: 68px;
+    gap: 9px;
+  }
+
+  .credpagos-card-request-offer__row svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .credpagos-card-request-offer__row strong {
+    font-size: 16px;
+  }
+
+  .credpagos-card-request-offer__row span {
+    font-size: 14px;
+  }
+
+  .credpagos-card-request-progress__line strong {
+    font-size: 16px;
+  }
+
+  .credpagos-card-request-progress__line span {
+    font-size: 16px;
+  }
+
+  .credpagos-card-request-content h2 {
+    font-size: 16px;
+  }
+
+  .credpagos-card-request-fields {
+    margin-top: 24px;
+    gap: 18px;
+  }
+
+  .credpagos-card-field>span,
+  .credpagos-card-field>label {
+    font-size: 17px;
+  }
+
+  .credpagos-card-field input,
+  .credpagos-card-field select {
+    min-height: 40px;
+    font-size: 16px;
+  }
+
+  .credpagos-card-request-legal {
+    font-size: 18px;
+  }
+
+  .credpagos-card-request-button {
+    width: 100%;
+    min-height: 52px;
+    font-size: 16px;
+  }
+
+  .credpagos-card-request-analysis__spinner {
+    width: 94px;
+    height: 94px;
+  }
+
+  .credpagos-card-request-analysis__lottie {
+    width: 94px;
+    height: 94px;
+  }
+
+  .credpagos-card-request-analysis strong {
+    font-size: 32px;
+  }
+
+  .credpagos-card-approved strong {
+    font-size: 56px;
+  }
+
+  .credpagos-card-approved__card {
+    width: min(100%, 420px);
+  }
+
+  .credpagos-card-approved__card-frame {
+    width: min(100%, 420px);
+  }
+
+  .credpagos-card-approved__holder-name {
+    left: 11.2%;
+    right: 38.7%;
+    bottom: 15.2%;
+    font-size: clamp(12px, 3vw, 14px);
+  }
+
+  .credpagos-card-approved p {
+    font-size: 22px;
+  }
+
+  .credpagos-card-pix-panel h2 {
+    font-size: 25px;
+  }
+
+  .credpagos-card-pix-panel>p {
+    font-size: 12px;
+  }
+
+  .credpagos-card-pix-summary li {
+    font-size: 18px;
+  }
+
+  .credpagos-card-pix-summary__total span,
+  .credpagos-card-pix-summary__total strong {
+    font-size: 24px;
+  }
+
+  .credpagos-card-pix-qr {
+    width: min(100%, 320px);
+    min-height: 280px;
+  }
+
+  .credpagos-card-pix-qr img {
+    width: 230px;
+    height: 230px;
+  }
+
+  .credpagos-card-pix-copy h3 {
+    font-size: 22px;
+  }
+
+  .credpagos-card-pix-copy p {
+    margin: 5px auto 0;
+    padding-left: 0;
+    color: #4b5563;
+    font-size: 12px;
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  .credpagos-card-pix-note p {
+    font-size: 12px;
+  }
+
+  .credpagos-card-pix-note small {
+    font-size: 12px;
   }
 }

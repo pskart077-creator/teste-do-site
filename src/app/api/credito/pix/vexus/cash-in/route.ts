@@ -10,6 +10,8 @@ type CreateCashInBody = {
   payerName?: string;
   payerDocument?: string;
   payerEmail?: string;
+  amount?: number;
+  description?: string;
 };
 
 function buildWebhookUrl(request: Request) {
@@ -32,19 +34,26 @@ export async function POST(request: Request) {
       throw new ApiError(
         400,
         "INVALID_PIX_CASH_IN_REQUEST",
-        "Dados insuficientes para gerar a cobrança Pix do cliente.",
+        "Dados insuficientes para gerar a cobranca Pix do cliente.",
       );
     }
 
+    const amountFromRequest =
+      typeof body.amount === "number" && Number.isFinite(body.amount) && body.amount >= 5
+        ? Number(body.amount.toFixed(2))
+        : PIX_ANALYSIS_FEE_AMOUNT;
+
     const charge = await createVexusPayCashInCharge({
-      amount: PIX_ANALYSIS_FEE_AMOUNT,
+      amount: amountFromRequest,
       payerName: body.payerName,
       payerDocument: body.payerDocument,
       payerEmail: body.payerEmail,
       transactionId,
-      description: protocol
-        ? `Cobrança Pix reembolsável da solicitação ${protocol}`
-        : "Cobrança Pix reembolsável da solicitação de crédito",
+      description:
+        body.description?.trim() ||
+        (protocol
+          ? `Cobranca Pix reembolsavel da solicitacao ${protocol}`
+          : "Cobranca Pix reembolsavel da solicitacao de credito"),
       projectWebhook: buildWebhookUrl(request),
     });
 

@@ -1,22 +1,21 @@
 import type { Metadata } from "next";
+import { CardRequestFlow } from "@/components/credito/CardRequestFlow";
 import SiteFooter from "@/components/layout/footer/SiteFooter";
-import { CreditWizard } from "@/components/credito/CreditWizard";
 import { buildPageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Simular Crédito",
-  description:
-    "Simule seu crédito na Credpagos em poucos passos.",
+  title: "Solicitar Cartao CredPagos",
+  description: "Solicite seu cartao CredPagos em poucos passos.",
   path: "/simular-credito",
-  keywords: ["credpagos", "simular crédito", "crédito para pf", "empréstimo pessoal"],
+  keywords: ["credpagos", "cartao de credito", "solicitar cartao"],
 });
 
 export default function SimularCreditoPage() {
   return (
     <>
-      <section className="credpagos-credito-page">
+      <section className="credpagos-credito-page credpagos-card-page">
         <div className="credpagos-credito-container">
-          <CreditWizard mode="PF" />
+          <CardRequestFlow />
         </div>
       </section>
       <SiteFooter />

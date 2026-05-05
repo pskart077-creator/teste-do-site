@@ -7,10 +7,12 @@ import { AnalysisLoadingStep } from "@/components/credito/AnalysisLoadingStep";
 import { BankDataForm } from "@/components/credito/BankDataForm";
 import { BusinessDataStep } from "@/components/credito/BusinessDataStep";
 import { ApprovalResultStep } from "@/components/credito/ApprovalResultStep";
+import { CardApplicationStep } from "@/components/credito/CardApplicationStep";
+import { CardFlowHeader } from "@/components/credito/CardFlowHeader";
+import { CardSimulatorIntro } from "@/components/credito/CardSimulatorIntro";
 import { CreditRequestStep } from "@/components/credito/CreditRequestStep";
 import { IncomeStep } from "@/components/credito/IncomeStep";
 import { InstallmentSelectionStep } from "@/components/credito/InstallmentSelectionStep";
-import { LoanSimulatorIntro } from "@/components/credito/LoanSimulatorIntro";
 import { MeiBusinessDataStep } from "@/components/credito/MeiBusinessDataStep";
 import { MeiResponsibleStep } from "@/components/credito/MeiResponsibleStep";
 import { PartnersStep } from "@/components/credito/PartnersStep";
@@ -19,7 +21,6 @@ import { PjDataForm } from "@/components/credito/PjDataForm";
 import { PixPaymentStep } from "@/components/credito/PixPaymentStep";
 import { ReceivingDataStep } from "@/components/credito/ReceivingDataStep";
 import { ReviewStep } from "@/components/credito/ReviewStep";
-import { SimulationLoadingStep } from "@/components/credito/SimulationLoadingStep";
 import { WizardActions } from "@/components/credito/WizardActions";
 import { WizardProgress } from "@/components/credito/WizardProgress";
 import { WizardStep } from "@/components/credito/WizardStep";
@@ -47,7 +48,10 @@ type CreditWizardProps = {
 };
 
 const ANALYSIS_LOADING_DELAY_MS = 5000;
-const INITIAL_SIMULATION_LOADING_DELAY_MS = 5000;
+
+function onlyDigits(value?: string) {
+  return (value ?? "").replace(/\D/g, "");
+}
 
 function money(value: number) {
   return Number(value.toFixed(2));
@@ -92,8 +96,7 @@ export function CreditWizard({ mode }: CreditWizardProps) {
   const [errors, setErrors] = useState<WizardErrors>({});
   const [globalMessage, setGlobalMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasStartedPfSimulation, setHasStartedPfSimulation] = useState(mode !== "PF");
-  const [isInitialSimulationLoading, setIsInitialSimulationLoading] = useState(false);
+  const [hasStartedPfFlow, setHasStartedPfFlow] = useState(mode !== "PF");
   const [submitResult, setSubmitResult] = useState<WizardSubmitResult | null>(null);
   const [postSubmitStep, setPostSubmitStep] = useState<"approval" | "installments" | "pix" | "receiving">("approval");
   const [selectedProposalAmount, setSelectedProposalAmount] = useState<number | null>(null);
@@ -250,18 +253,35 @@ export function CreditWizard({ mode }: CreditWizardProps) {
     }));
   }
 
-  async function handleStartPfSimulation() {
+  function handleStartPfFlow() {
     setGlobalMessage(null);
-    setIsInitialSimulationLoading(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
-
-    await new Promise((resolve) =>
-      window.setTimeout(resolve, INITIAL_SIMULATION_LOADING_DELAY_MS)
-    );
-
-    setHasStartedPfSimulation(true);
+    setHasStartedPfFlow(true);
     setStep(0);
-    setIsInitialSimulationLoading(false);
+  }
+
+  function canContinueCardApplicationStep() {
+    if (mode !== "PF") {
+      return true;
+    }
+
+    const pfData = draft.pfData;
+
+    if (!pfData) {
+      return false;
+    }
+
+    if (step === 0) {
+      const nameParts = pfData.fullName.trim().split(/\s+/).filter(Boolean);
+
+      return nameParts.length >= 2 && onlyDigits(pfData.cpf).length === 11 && Boolean(pfData.birthDate);
+    }
+
+    if (step === 1) {
+      return Number(pfData.monthlyIncome) > 0;
+    }
+
+    return true;
   }
 
   function updateConsent(
@@ -514,35 +534,54 @@ export function CreditWizard({ mode }: CreditWizardProps) {
     return null;
   }
 
+  function renderCardHeaderIfNeeded() {
+    return mode === "PF" ? <CardFlowHeader /> : null;
+  }
+
   if (isSubmitting) {
     return (
       <div className="credpagos-wizard-wrapper">
+        {renderCardHeaderIfNeeded()}
         {shouldShowProgress ? <WizardProgress steps={steps} currentStep={steps.length - 1} /> : null}
         <AnalysisLoadingStep />
       </div>
     );
   }
 
-  if (mode === "PF" && isInitialSimulationLoading) {
+  if (mode === "PF" && !submitResult && !hasStartedPfFlow) {
     return (
       <div className="credpagos-wizard-wrapper">
-        <SimulationLoadingStep />
+        <CardSimulatorIntro
+          cpf={draft.pfData?.cpf ?? ""}
+          onCpfChange={(cpf) => updatePf("cpf", cpf)}
+          onSubmit={handleStartPfFlow}
+        />
       </div>
     );
   }
 
-  if (mode === "PF" && !submitResult && !hasStartedPfSimulation) {
+  if (mode === "PF" && !submitResult) {
+    const isLastStep = step >= steps.length - 1;
+
     return (
       <div className="credpagos-wizard-wrapper">
-        <LoanSimulatorIntro
-          amount={draft.request.requestedAmount}
-          term={draft.request.desiredTerm}
-          onAmountChange={(amount) => updateRequest("requestedAmount", amount)}
-          onTermChange={(term) => updateRequest("desiredTerm", term)}
-          onSubmit={() => {
-            void handleStartPfSimulation();
+        <CardApplicationStep
+          canGoBack={step > 0}
+          canContinue={canContinueCardApplicationStep() && !isSubmitting}
+          continueLabel="Continuar"
+          globalMessage={globalMessage}
+          onBack={handleBack}
+          onContinue={() => {
+            if (isLastStep) {
+              void handleSubmit();
+              return;
+            }
+
+            handleNext();
           }}
-        />
+        >
+          {renderStep()}
+        </CardApplicationStep>
       </div>
     );
   }
@@ -551,6 +590,7 @@ export function CreditWizard({ mode }: CreditWizardProps) {
     if (postSubmitStep === "receiving") {
       return (
         <div className="credpagos-wizard-wrapper">
+          {renderCardHeaderIfNeeded()}
           <ReceivingDataStep
             result={selectedSubmitResult ?? submitResult}
             payerName={pixPayer.name}
@@ -565,6 +605,7 @@ export function CreditWizard({ mode }: CreditWizardProps) {
     if (postSubmitStep === "pix") {
       return (
         <div className="credpagos-wizard-wrapper">
+          {renderCardHeaderIfNeeded()}
           <PixPaymentStep
             result={selectedSubmitResult ?? submitResult}
             payer={pixPayer}
@@ -580,6 +621,7 @@ export function CreditWizard({ mode }: CreditWizardProps) {
     if (postSubmitStep === "installments" && selectedProposalAmount) {
       return (
         <div className="credpagos-wizard-wrapper">
+          {renderCardHeaderIfNeeded()}
           <InstallmentSelectionStep
             amount={selectedProposalAmount}
             maxInstallmentAmount={submitResult.maxInstallmentAmount}
@@ -597,6 +639,7 @@ export function CreditWizard({ mode }: CreditWizardProps) {
 
     return (
       <div className="credpagos-wizard-wrapper">
+        {renderCardHeaderIfNeeded()}
         <ApprovalResultStep
           result={submitResult}
           selectedAmount={selectedProposalAmount}
