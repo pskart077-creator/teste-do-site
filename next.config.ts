@@ -15,7 +15,7 @@ function getAllowedDevOrigins() {
     .filter(Boolean);
 
   return Array.from(
-    new Set([...defaultDevOrigins, ...localIpv4Origins, ...extraOrigins])
+    new Set([...defaultDevOrigins, ...localIpv4Origins, ...extraOrigins]),
   );
 }
 
@@ -38,11 +38,46 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
 
   experimental: {
-    // Keep multipart bodies intact through proxy so the API can return proper upload errors.
     proxyClientMaxBodySize: "25mb",
   },
 
-  allowedDevOrigins: getAllowedDevOrigins(),
+  ...(process.env.NODE_ENV === "development"
+    ? {
+        allowedDevOrigins: getAllowedDevOrigins(),
+      }
+    : {}),
+
+  outputFileTracingExcludes: {
+    "/*": [
+      "./.git/**",
+      "./.next/cache/**",
+      "./node_modules/.cache/**",
+
+      "./public/uploads/**",
+      "./public/**/*.zip",
+      "./public/**/*.rar",
+      "./public/**/*.7z",
+      "./public/**/*.mp4",
+      "./public/**/*.mov",
+      "./public/**/*.avi",
+      "./public/**/*.mkv",
+      "./public/**/*.psd",
+      "./public/**/*.ai",
+      "./public/**/*.fig",
+
+      "./node_modules/prisma/**",
+      "./node_modules/@prisma/engines/**",
+      "./node_modules/@prisma/debug/**",
+      "./node_modules/@prisma/engines-version/**",
+      "./node_modules/@prisma/fetch-engine/**",
+      "./node_modules/@prisma/get-platform/**",
+
+      "./node_modules/@next/swc-*/**",
+      "./node_modules/@swc/core-*/**",
+      "./node_modules/@esbuild/**",
+      "./node_modules/typescript/**",
+    ],
+  },
 
   images: {
     remotePatterns: [
