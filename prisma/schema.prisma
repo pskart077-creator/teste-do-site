@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum UserRole {
@@ -944,6 +945,11 @@ enum CreditApplicationStatus {
   CANCELED
 }
 
+enum CardCreditRequestStatus {
+  RECEIVED
+  APPROVED
+}
+
 enum CreditRiskLevel {
   LOW
   MEDIUM
@@ -1053,6 +1059,55 @@ model CustomerProfile {
   @@index([userId])
   @@index([document])
   @@map("customer_profiles")
+}
+
+model CardCreditRequest {
+  id                     String                  @id @default(cuid()) @map("id")
+  protocol               String                  @unique @map("protocol")
+  status                 CardCreditRequestStatus @default(APPROVED) @map("status")
+  fullName               String                  @map("full_name")
+  email                  String                  @map("email")
+  phone                  String?                 @map("phone")
+  cpf                    String?                 @map("cpf")
+  birthDate              String?                 @map("birth_date")
+  monthlyIncome          Float                   @default(0) @map("monthly_income")
+  motherName             String?                 @map("mother_name")
+  profession             String?                 @map("profession")
+  customProfession       String?                 @map("custom_profession")
+  zipCode                String?                 @map("zip_code")
+  street                 String?                 @map("street")
+  number                 String?                 @map("number")
+  complement             String?                 @map("complement")
+  neighborhood           String?                 @map("neighborhood")
+  state                  String?                 @map("state")
+  city                   String?                 @map("city")
+  invoiceDueDay          String?                 @map("invoice_due_day")
+  approvedLimit          Float                   @default(400) @map("approved_limit")
+  issuanceToken          String?                 @unique @map("issuance_token")
+  issuanceTokenCreatedAt DateTime?               @map("issuance_token_created_at")
+  issuanceStartedAt      DateTime?               @map("issuance_started_at")
+  issuancePaymentAttempt Int                     @default(0) @map("issuance_payment_attempt")
+  issuancePaymentStatus  String?                 @map("issuance_payment_status")
+  issuancePaymentAmount  Float                   @default(19.9) @map("issuance_payment_amount")
+  issuancePaymentTransactionId String?           @unique @map("issuance_payment_transaction_id")
+  issuancePaymentQrCode  String?                 @map("issuance_payment_qr_code")
+  issuancePaymentCopyPaste String?               @map("issuance_payment_copy_paste")
+  issuancePaymentProviderStatus String?          @map("issuance_payment_provider_status")
+  issuancePaymentCreatedAt DateTime?             @map("issuance_payment_created_at")
+  issuancePaymentPaidAt  DateTime?               @map("issuance_payment_paid_at")
+  issuancePaymentError   String?                 @map("issuance_payment_error")
+  approvalEmailScheduledAt DateTime?             @map("approval_email_scheduled_at")
+  approvalEmailSentAt    DateTime?               @map("approval_email_sent_at")
+  approvalEmailSendingAt DateTime?               @map("approval_email_sending_at")
+  approvalEmailError     String?                 @map("approval_email_error")
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              DateTime                @updatedAt @map("updated_at")
+
+  @@index([email, createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@index([approvalEmailScheduledAt, approvalEmailSentAt])
+  @@index([issuancePaymentStatus, updatedAt(sort: Desc)])
+  @@map("card_credit_requests")
 }
 
 model CreditApplication {

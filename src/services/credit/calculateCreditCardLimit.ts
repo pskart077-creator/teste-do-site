@@ -1,4 +1,9 @@
 import { formatCurrencyBrl as formatCurrencyBrlHelper } from "@/lib/credit/helpers";
+import {
+  INITIAL_CREDIT_LIMIT_MAX,
+  INITIAL_CREDIT_LIMIT_MIN,
+  calculateInitialCreditLimit,
+} from "@/services/credit/calculateInitialCreditLimit";
 
 export type CreditCardRiskProfile = "LOW" | "MEDIUM" | "HIGH" | "RESTRICTED";
 
@@ -32,31 +37,31 @@ type CreditCardLimitRules = {
 const CREDIT_CARD_LIMIT_RULES: Record<CreditCardRiskProfile, CreditCardLimitRules> = {
   LOW: {
     commitmentRate: 0.3,
-    incomeMultiplier: 0.8,
+    incomeMultiplier: 0.5,
     marginMultiplier: 3,
-    minLimit: 500,
-    maxLimit: 5000,
+    minLimit: INITIAL_CREDIT_LIMIT_MIN,
+    maxLimit: INITIAL_CREDIT_LIMIT_MAX,
   },
   MEDIUM: {
     commitmentRate: 0.25,
-    incomeMultiplier: 0.5,
-    marginMultiplier: 2,
-    minLimit: 300,
-    maxLimit: 3000,
+    incomeMultiplier: 0.45,
+    marginMultiplier: 2.5,
+    minLimit: INITIAL_CREDIT_LIMIT_MIN,
+    maxLimit: INITIAL_CREDIT_LIMIT_MAX,
   },
   HIGH: {
     commitmentRate: 0.15,
     incomeMultiplier: 0.3,
     marginMultiplier: 1.5,
-    minLimit: 150,
-    maxLimit: 1500,
+    minLimit: INITIAL_CREDIT_LIMIT_MIN,
+    maxLimit: 2000,
   },
   RESTRICTED: {
     commitmentRate: 0.08,
     incomeMultiplier: 0.15,
     marginMultiplier: 1,
-    minLimit: 100,
-    maxLimit: 800,
+    minLimit: INITIAL_CREDIT_LIMIT_MIN,
+    maxLimit: 1000,
   },
 };
 
@@ -91,17 +96,21 @@ export function createCreditLimitExplanation(result: CreditCardLimitResult) {
 export function calculateCreditCardLimit(input: CreditCardLimitInput): CreditCardLimitResult {
   const monthlyIncome = toPositiveCurrency(input.monthlyIncome);
   const currentMonthlyDebt = toPositiveCurrency(input.currentMonthlyDebt);
-  const riskProfile = input.riskProfile ?? "MEDIUM";
+  const riskProfile = input.riskProfile ?? "LOW";
   const rules = CREDIT_CARD_LIMIT_RULES[riskProfile];
 
   const availableMonthlyMargin = toCurrency(monthlyIncome * rules.commitmentRate - currentMonthlyDebt);
   const incomeBasedLimit = toCurrency(monthlyIncome * rules.incomeMultiplier);
   const marginBasedLimit = toCurrency(availableMonthlyMargin * rules.marginMultiplier);
+  const initialLimit = calculateInitialCreditLimit({
+    monthlyIncome,
+    currentMonthlyDebt,
+  });
 
   const rawSuggestedLimit =
     availableMonthlyMargin < 0
       ? rules.minLimit
-      : Math.min(incomeBasedLimit, marginBasedLimit, rules.maxLimit);
+      : Math.min(initialLimit.suggestedLimit, incomeBasedLimit, marginBasedLimit, rules.maxLimit);
 
   const boundedSuggestedLimit = Math.min(
     rules.maxLimit,

@@ -1,6 +1,6 @@
 "use client";
 
-import { createElement, useEffect, useMemo, useRef, useState } from "react";
+import { createElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Script from "next/script";
 import { BadgeDollarSign, CalendarCheck, Check, ChevronRight, Copy, Grid3X3, Info, Mail, Truck } from "lucide-react";
@@ -8,6 +8,12 @@ import { CardFlowHeader } from "@/components/credito/CardFlowHeader";
 import { CardSimulatorIntro } from "@/components/credito/CardSimulatorIntro";
 import { SearchableProfessionSelect } from "@/components/credito/SearchableProfessionSelect";
 import { CARD_REQUEST_PROFESSIONS } from "@/components/credito/cardRequestProfessions";
+import {
+  CARD_ISSUANCE_PAYMENT_CODE,
+  CARD_ISSUANCE_PAYMENT_ITEMS,
+  CARD_ISSUANCE_PAYMENT_TOTAL,
+} from "@/lib/credit/card-issuance";
+import { getCardDisplayNumber } from "@/lib/credit/card-display-number";
 import { formatCurrencyBrl, maskPhoneBr } from "@/lib/credit/helpers";
 import { calculateCreditCardLimit } from "@/services/credit/calculateCreditCardLimit";
 import { fetchAddressByZipCode } from "@/services/credit/fetchAddressByZipCode";
@@ -15,7 +21,7 @@ import { fetchAddressByZipCode } from "@/services/credit/fetchAddressByZipCode";
 type PaymentStatus = "pending" | "paid" | "expired" | "error";
 type ZipCodeStatus = "idle" | "loading" | "success" | "error";
 type CardFlowStep = 1 | 2 | 3 | 4 | 5;
-type CardFlowStage = "intro" | CardFlowStep | "approved" | "payment" | "delivery";
+type CardFlowStage = "intro" | CardFlowStep | "received" | "approved" | "payment" | "delivery";
 
 type VexusCashInChargeView = {
   amount: number;
@@ -79,17 +85,11 @@ const INVOICE_OPTIONS = [
   "Todo dia 25",
 ] as const;
 
-const PAYMENT_ITEMS = [
-  { label: "Taxa de emissão do cartão", value: 9.9 },
-  { label: "Frete para entrega", value: 5 },
-  { label: "Processamento do pedido", value: 5 },
-] as const;
-
-const PAYMENT_TOTAL = PAYMENT_ITEMS.reduce((total, item) => total + item.value, 0);
-
 const PLACEHOLDER_PIX_CODE = "";
 
-const PAYMENT_TRANSACTION_CODE = "4900";
+const PAYMENT_ITEMS = CARD_ISSUANCE_PAYMENT_ITEMS;
+const PAYMENT_TOTAL = CARD_ISSUANCE_PAYMENT_TOTAL;
+const PAYMENT_TRANSACTION_CODE = CARD_ISSUANCE_PAYMENT_CODE;
 const APPROVED_CARD_SOURCES = [
   "/assets/img/cartao/cartao-s-nome.png",
   "/assets/img/cartao/cartao-s-nome.webp",
@@ -422,28 +422,103 @@ export function CardRequestFlow() {
   const [cashInCharge, setCashInCharge] = useState<VexusCashInChargeView | null>(null);
   const [isLoadingCashInCharge, setIsLoadingCashInCharge] = useState(false);
   const [pixErrorMessage, setPixErrorMessage] = useState<string | null>(null);
+  const [submissionErrorMessage, setSubmissionErrorMessage] = useState<string | null>(null);
   const [pixRetryCount, setPixRetryCount] = useState(0);
   const [protocol] = useState(() => createCardProtocol());
   const lastFetchedZipCodeRef = useRef("");
   const hasManualAddressEditRef = useRef(false);
+  const hasSubmittedRequestRef = useRef(false);
 
   const currentStep = typeof stage === "number" ? stage : null;
   const canContinueCurrentStep = currentStep ? Object.keys(getStepErrors(currentStep, state)).length === 0 : false;
   const paymentTransactionId = `${protocol}-PIX-${PAYMENT_TRANSACTION_CODE}-${pixRetryCount}`;
+
+  const submitCardRequest = useCallback(async () => {
+    hasSubmittedRequestRef.current = true;
+    setSubmissionErrorMessage(null);
+
+    await readApiEnvelope<{ request: { id: string; protocol: string; email: string } }>(
+      await fetch("/api/credito/cartao/solicitacoes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          protocol,
+          cpf: introCpf,
+          fullName: state.fullName,
+          email: state.email,
+          phone: state.phone,
+          birthDate: state.birthDate,
+          monthlyIncome: state.monthlyIncome,
+          motherName: state.motherName,
+          profession: state.profession,
+          customProfession: state.customProfession,
+          zipCode: state.zipCode,
+          street: state.street,
+          number: state.noNumber ? "" : state.number,
+          complement: state.complement,
+          neighborhood: state.neighborhood,
+          state: state.state,
+          city: state.city,
+          invoiceDueDay: state.invoiceDueDay,
+        }),
+      }),
+    );
+  }, [
+    introCpf,
+    protocol,
+    state.birthDate,
+    state.city,
+    state.complement,
+    state.customProfession,
+    state.email,
+    state.fullName,
+    state.invoiceDueDay,
+    state.monthlyIncome,
+    state.motherName,
+    state.neighborhood,
+    state.noNumber,
+    state.number,
+    state.phone,
+    state.profession,
+    state.state,
+    state.street,
+    state.zipCode,
+  ]);
 
   useEffect(() => {
     if (stage !== 5) {
       return;
     }
 
+    if (hasSubmittedRequestRef.current) {
+      return;
+    }
+
+    let cancelled = false;
+
     const timeoutId = window.setTimeout(() => {
-      setStage("approved");
+      void submitCardRequest()
+        .then(() => {
+          if (!cancelled) {
+            setStage("received");
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            hasSubmittedRequestRef.current = false;
+            setSubmissionErrorMessage("Não foi possível registrar sua solicitação. Confira os dados e tente novamente.");
+            setStage(4);
+          }
+        });
     }, 10_000);
 
     return () => {
+      cancelled = true;
       window.clearTimeout(timeoutId);
     };
-  }, [stage]);
+  }, [stage, submitCardRequest]);
 
   useEffect(() => {
     if (stage !== "payment") {
@@ -518,7 +593,7 @@ export function CardRequestFlow() {
     return () => {
       cancelled = true;
     };
-  }, [stage, protocol, paymentTransactionId, state.email, state.fullName, state.phone]);
+  }, [introCpf, stage, protocol, paymentTransactionId, state.email, state.fullName, state.phone]);
 
   useEffect(() => {
     if (stage !== "payment") {
@@ -711,6 +786,8 @@ export function CardRequestFlow() {
     if (typeof stage !== "number") {
       return;
     }
+
+    setSubmissionErrorMessage(null);
 
     const nextErrors = getStepErrors(stage, state);
     setErrors(nextErrors);
@@ -1140,11 +1217,45 @@ export function CardRequestFlow() {
 
   const approvedLimitFormatted = useMemo(() => formatCurrencyBrl(state.approvedLimit), [state.approvedLimit]);
   const approvedCardHolderName = useMemo(() => formatCardHolderName(state.fullName), [state.fullName]);
+  const cardDisplayNumber = useMemo(
+    () => getCardDisplayNumber(`${protocol}:${introCpf}:${state.email}`),
+    [introCpf, protocol, state.email],
+  );
   const approvedCardSource = APPROVED_CARD_SOURCES[Math.min(approvedCardSourceIndex, APPROVED_CARD_SOURCES.length - 1)];
   const deliveryEmail = state.email.trim();
 
   if (stage === "intro") {
-    return <CardSimulatorIntro cpf={introCpf} onCpfChange={setIntroCpf} onSubmit={() => setStage(1)} />;
+    return (
+      <CardSimulatorIntro
+        cpf={introCpf}
+        onCpfChange={setIntroCpf}
+        onSubmit={() => setStage(1)}
+      />
+    );
+  }
+
+  if (stage === "received") {
+    return (
+      <div className="credpagos-card-request-shell">
+        <CardFlowHeader />
+
+        <section className="credpagos-card-delivery">
+          <span className="credpagos-card-delivery__icon" aria-hidden="true">
+            <Mail size={30} />
+          </span>
+
+          <h2>Sua solicitação foi recebida com sucesso.</h2>
+          <p>
+            Nossa equipe está finalizando a análise do seu perfil. O resultado será enviado para o e-mail informado no
+            cadastro.
+          </p>
+
+          <small>
+            Verifique sua caixa de entrada e também a pasta de spam ou promoções.
+          </small>
+        </section>
+      </div>
+    );
   }
 
   if (stage === "approved") {
@@ -1171,6 +1282,7 @@ export function CardRequestFlow() {
               }}
             />
             <span className="credpagos-card-approved__holder-name">{approvedCardHolderName}</span>
+            <span className="credpagos-card-approved__card-number">{cardDisplayNumber}</span>
           </div>
 
           <p>Clique em Continuar para prosseguir com a emissão do seu cartão de crédito.</p>
@@ -1356,7 +1468,12 @@ export function CardRequestFlow() {
 
         <div className="credpagos-card-request-right">
           <CardProgressHeader step={currentStep ?? 5} />
-          <article className="credpagos-card-request-content">{renderStepContent()}</article>
+          <article className="credpagos-card-request-content">
+            {renderStepContent()}
+            {submissionErrorMessage ? (
+              <p className="credpagos-alert credpagos-alert--error">{submissionErrorMessage}</p>
+            ) : null}
+          </article>
         </div>
       </section>
     </div>

@@ -482,8 +482,8 @@ img {
   padding-top: .8rem;
 }
 
-.site-header-home {
-  background: transparent;
+.site-header-home:not(.is-scrolled) {
+  background: #061427 url("/assets/img/bg/bg-01.png") center top / cover no-repeat;
 }
 
 .site-header {
@@ -1098,7 +1098,11 @@ img {
   overflow: hidden;
   min-height: 760px;
   padding: 168px 0 110px;
-  background: linear-gradient(180deg, rgba(0, 0, 0, .02) 0%, rgba(0, 0, 0, .16) 100%), url("/assets/img/bg/bg-01.png") center center / cover no-repeat;
+  background-color: #061427;
+  background-image: linear-gradient(180deg, rgba(0, 0, 0, .02) 0%, rgba(0, 0, 0, .16) 100%), url("/assets/img/bg/bg-01.png");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
   isolation: isolate;
 }
 
